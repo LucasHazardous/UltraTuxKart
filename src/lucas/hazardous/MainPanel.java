@@ -220,7 +220,6 @@ public class MainPanel extends JPanel implements ActionListener {
             switch (e.getKeyCode()) {
                 case KeyEvent.VK_W:
                     isDriving = false;
-                    speedTime = 0;
                     break;
                 case KeyEvent.VK_D:
                     goingRight = false;
