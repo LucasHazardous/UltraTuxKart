@@ -28,7 +28,7 @@ public class MainPanel extends JPanel implements ActionListener {
     };
 
     //player stats
-    private static final int MAX_PLAYER_SPEED = 1;
+    private static final int MAX_PLAYER_SPEED = 2;
     private static final int PLAYER_SIZE = 10;
 
     private boolean isDriving = false;
@@ -44,6 +44,9 @@ public class MainPanel extends JPanel implements ActionListener {
 
     private float directionPlayerY = -1f;
     private boolean mainDir = true;
+
+    private int directionChanger1 = 1;
+    private int directionChanger2 = 1;
 
     MainPanel() {
         this.setPreferredSize(new Dimension(GAME_WIDTH, GAME_HEIGHT));
@@ -82,9 +85,38 @@ public class MainPanel extends JPanel implements ActionListener {
         }
     }
 
+    private void movePlayerWithDirection() {
+        //change speed on x-axis
+        if(goingLeft) {
+            directionChanger1 = 1;
+            directionChanger2 = -1;
+        } else if(goingRight) {
+            directionChanger1 = -1;
+            directionChanger2 = 1;
+        }
+
+        if(directionPlayerY > 0f) {
+            if (mainDir) {
+                playerX += (Math.pow(speedTime, 1.3) * MAX_PLAYER_SPEED) / 2 * directionChanger1*(1f - directionPlayerY);
+            } else {
+                playerX += (Math.pow(speedTime, 1.3) * MAX_PLAYER_SPEED) / 2 *directionChanger2* (1f - directionPlayerY);
+            }
+        } else {
+            if (mainDir) {
+                playerX += (Math.pow(speedTime, 1.3) * MAX_PLAYER_SPEED) / 2 * directionChanger1*(1f + directionPlayerY);
+            } else {
+                playerX += (Math.pow(speedTime, 1.3) * MAX_PLAYER_SPEED) / 2 *directionChanger2* (1f + directionPlayerY);
+            }
+        }
+
+        //change speed on y-axis
+        playerY += (Math.pow(speedTime, 1.3) * MAX_PLAYER_SPEED) / 2 * directionPlayerY;
+    }
+
     private void playerMove() {
         if (isDriving) {
-            if (goingRight) {
+            //change rotation of speed vector
+            if (goingRight || goingLeft) {
                 if (directionPlayerY <= -1f) {
                     mainDir = false;
                 }
@@ -100,25 +132,10 @@ public class MainPanel extends JPanel implements ActionListener {
                 }
             }
 
-            if(directionPlayerY > 0f) {
-                if (mainDir) {
-                    playerX += (Math.pow(speedTime, 1.3) * MAX_PLAYER_SPEED) / 2 * -(1f - directionPlayerY);
-                } else {
-                    playerX += (Math.pow(speedTime, 1.3) * MAX_PLAYER_SPEED) / 2 * (1f - directionPlayerY);
-                }
-            } else {
-                if (mainDir) {
-                    playerX += (Math.pow(speedTime, 1.3) * MAX_PLAYER_SPEED) / 2 * -(1f + directionPlayerY);
-                } else {
-                    playerX += (Math.pow(speedTime, 1.3) * MAX_PLAYER_SPEED) / 2 * (1f + directionPlayerY);
-                }
-            }
+            //change speed
+            movePlayerWithDirection();
 
-
-
-            playerY += (Math.pow(speedTime, 1.3) * MAX_PLAYER_SPEED) / 2 * directionPlayerY;
-
-
+            //checks to prevent player from going out of the window
             if (playerX < 0) {
                 playerX = 0;
             }
@@ -134,12 +151,15 @@ public class MainPanel extends JPanel implements ActionListener {
                 playerY = GAME_HEIGHT - PLAYER_SIZE;
             }
 
+            //increase time required to reach maximum speed
             if (speedTime < TIME_TO_REACH_MAX_SPEED) {
                 speedTime += 1;
             }
         } else {
+            //slowly stop player
             if (speedTime > 0) {
                 speedTime -= 1;
+                movePlayerWithDirection();
             }
         }
     }
