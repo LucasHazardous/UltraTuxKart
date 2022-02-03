@@ -1,11 +1,15 @@
 package lucas.hazardous;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
 public class MainPanel extends JPanel implements ActionListener {
     //sizes of components
@@ -29,12 +33,11 @@ public class MainPanel extends JPanel implements ActionListener {
 
     //player stats
     private static final int MAX_PLAYER_SPEED = 2;
-    private static final int PLAYER_SIZE = 10;
+    private static final int PLAYER_SIZE = 20;
 
     private boolean isDriving = false;
     private boolean goingRight = false;
     private boolean goingLeft = false;
-    private boolean goingBack = false;
 
     private int playerX = 9;
     private int playerY = GAME_HEIGHT / 2;
@@ -44,9 +47,25 @@ public class MainPanel extends JPanel implements ActionListener {
 
     private float directionPlayerY = -1f;
     private boolean mainDir = true;
-
     private int directionChanger1 = 1;
     private int directionChanger2 = 1;
+
+    //player's image
+    private static BufferedImage PLAYER_IMG;
+
+    static {
+        try {
+            PLAYER_IMG = ImageIO.read(new File("img.png"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    //coordinates for line
+    private int lastPlayerX = playerX;
+    private int lastPlayerY = playerY;
+    private int lineX = playerX;
+    private int lineY = playerY;
 
     MainPanel() {
         this.setPreferredSize(new Dimension(GAME_WIDTH, GAME_HEIGHT));
@@ -80,12 +99,17 @@ public class MainPanel extends JPanel implements ActionListener {
             }
 
             //draw player
+            g.drawImage(PLAYER_IMG, playerX, playerY, PLAYER_SIZE, PLAYER_SIZE, null);
+
+            //draw help line
             g.setColor(Color.red);
-            g.fillRect(playerX, playerY, PLAYER_SIZE, PLAYER_SIZE);
+            g.drawLine(playerX, playerY, lineX, lineY);
         }
     }
 
     private void movePlayerWithDirection() {
+        lastPlayerX = playerX;
+        lastPlayerY = playerY;
         //change speed on x-axis
         if(goingLeft) {
             directionChanger1 = 1;
@@ -111,6 +135,8 @@ public class MainPanel extends JPanel implements ActionListener {
 
         //change speed on y-axis
         playerY += (Math.pow(speedTime, 1.3) * MAX_PLAYER_SPEED) / 2 * directionPlayerY;
+        lineX = playerX*2-lastPlayerX;
+        lineY = playerY*2-lastPlayerY;
     }
 
     private void playerMove() {
@@ -172,6 +198,7 @@ public class MainPanel extends JPanel implements ActionListener {
         repaint();
     }
 
+    //player controls
     private class ControllKeyadapter extends KeyAdapter {
         @Override
         public void keyPressed(KeyEvent e) {
@@ -184,9 +211,6 @@ public class MainPanel extends JPanel implements ActionListener {
                     break;
                 case KeyEvent.VK_A:
                     goingLeft = true;
-                    break;
-                case KeyEvent.VK_S:
-                    goingBack = true;
                     break;
             }
         }
@@ -203,9 +227,6 @@ public class MainPanel extends JPanel implements ActionListener {
                     break;
                 case KeyEvent.VK_A:
                     goingLeft = false;
-                    break;
-                case KeyEvent.VK_S:
-                    goingBack = false;
                     break;
             }
         }
