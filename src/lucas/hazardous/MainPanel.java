@@ -1,15 +1,11 @@
 package lucas.hazardous;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 
 public class MainPanel extends JPanel implements ActionListener {
     //sizes of components
@@ -17,10 +13,11 @@ public class MainPanel extends JPanel implements ActionListener {
     private static final int GAME_HEIGHT = 500;
     private static final int TILE_SIZE = 100;
 
-    //game essential variables
+    //essential variables
     private static final int DELAY = 100;
     private Timer timer;
     private boolean isGameRunning;
+    private Player player = new Player(GAME_WIDTH, GAME_HEIGHT);
 
     //game map
     private byte[][] map = new byte[][]{
@@ -30,42 +27,6 @@ public class MainPanel extends JPanel implements ActionListener {
             {0, 0, 0, 1, 1},
             {1, 1, 1, 1, 1}
     };
-
-    //player stats
-    private static final int MAX_PLAYER_SPEED = 2;
-    private static final int PLAYER_SIZE = 20;
-
-    private boolean isDriving = false;
-    private boolean goingRight = false;
-    private boolean goingLeft = false;
-
-    private int playerX = 9;
-    private int playerY = GAME_HEIGHT / 2;
-
-    private int speedTime = 0;
-    private static final int TIME_TO_REACH_MAX_SPEED = 7;
-
-    private float directionPlayerY = -1f;
-    private boolean mainDir = true;
-    private int directionChanger1 = 1;
-    private int directionChanger2 = 1;
-
-    //player's image
-    private static BufferedImage PLAYER_IMG;
-
-    static {
-        try {
-            PLAYER_IMG = ImageIO.read(new File("img.png"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    //coordinates for line
-    private int lastPlayerX = playerX;
-    private int lastPlayerY = playerY;
-    private int lineX = playerX;
-    private int lineY = playerY;
 
     MainPanel() {
         this.setPreferredSize(new Dimension(GAME_WIDTH, GAME_HEIGHT));
@@ -99,101 +60,18 @@ public class MainPanel extends JPanel implements ActionListener {
             }
 
             //draw player
-            g.drawImage(PLAYER_IMG, playerX, playerY, PLAYER_SIZE, PLAYER_SIZE, null);
+            g.drawImage(Player.PLAYER_IMG, player.getPlayerX(), player.getPlayerY(), Player.PLAYER_SIZE, Player.PLAYER_SIZE, null);
 
-            //draw help line
+            //draw speed vector
             g.setColor(Color.red);
-            g.drawLine(playerX, playerY, lineX, lineY);
-        }
-    }
-
-    private void movePlayerWithDirection() {
-        lastPlayerX = playerX;
-        lastPlayerY = playerY;
-        //change speed on x-axis
-        if(goingLeft) {
-            directionChanger1 = 1;
-            directionChanger2 = -1;
-        } else if(goingRight) {
-            directionChanger1 = -1;
-            directionChanger2 = 1;
-        }
-
-        if(directionPlayerY > 0f) {
-            if (mainDir) {
-                playerX += (Math.pow(speedTime, 1.3) * MAX_PLAYER_SPEED) / 2 * directionChanger1*(1f - directionPlayerY);
-            } else {
-                playerX += (Math.pow(speedTime, 1.3) * MAX_PLAYER_SPEED) / 2 *directionChanger2* (1f - directionPlayerY);
-            }
-        } else {
-            if (mainDir) {
-                playerX += (Math.pow(speedTime, 1.3) * MAX_PLAYER_SPEED) / 2 * directionChanger1*(1f + directionPlayerY);
-            } else {
-                playerX += (Math.pow(speedTime, 1.3) * MAX_PLAYER_SPEED) / 2 *directionChanger2* (1f + directionPlayerY);
-            }
-        }
-
-        //change speed on y-axis
-        playerY += (Math.pow(speedTime, 1.3) * MAX_PLAYER_SPEED) / 2 * directionPlayerY;
-        lineX = playerX*2-lastPlayerX;
-        lineY = playerY*2-lastPlayerY;
-    }
-
-    private void playerMove() {
-        if (isDriving) {
-            //change rotation of speed vector
-            if (goingRight || goingLeft) {
-                if (directionPlayerY <= -1f) {
-                    mainDir = false;
-                }
-
-                if (directionPlayerY >= 1f) {
-                    mainDir = true;
-                }
-
-                if (mainDir) {
-                    directionPlayerY -= .2f;
-                } else {
-                    directionPlayerY += .2f;
-                }
-            }
-
-            //change speed
-            movePlayerWithDirection();
-
-            //checks to prevent player from going out of the window
-            if (playerX < 0) {
-                playerX = 0;
-            }
-            if (playerY < 0) {
-                playerY = 0;
-            }
-
-            if (playerX > GAME_WIDTH - PLAYER_SIZE) {
-                playerX = GAME_WIDTH - PLAYER_SIZE;
-            }
-
-            if (playerY > GAME_HEIGHT - PLAYER_SIZE) {
-                playerY = GAME_HEIGHT - PLAYER_SIZE;
-            }
-
-            //increase time required to reach maximum speed
-            if (speedTime < TIME_TO_REACH_MAX_SPEED) {
-                speedTime += 1;
-            }
-        } else {
-            //slowly stop player
-            if (speedTime > 0) {
-                speedTime -= 1;
-                movePlayerWithDirection();
-            }
+            g.drawLine(player.getPlayerX(), player.getPlayerY(), player.getLineX(), player.getLineY());
         }
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         if (isGameRunning) {
-            playerMove();
+            player.playerMove();
         }
         repaint();
     }
@@ -204,13 +82,13 @@ public class MainPanel extends JPanel implements ActionListener {
         public void keyPressed(KeyEvent e) {
             switch (e.getKeyCode()) {
                 case KeyEvent.VK_W:
-                    isDriving = true;
+                    player.setIsDriving(true);
                     break;
                 case KeyEvent.VK_D:
-                    goingRight = true;
+                    player.setGoingRight(true);
                     break;
                 case KeyEvent.VK_A:
-                    goingLeft = true;
+                    player.setGoingLeft(true);
                     break;
             }
         }
@@ -219,13 +97,13 @@ public class MainPanel extends JPanel implements ActionListener {
         public void keyReleased(KeyEvent e) {
             switch (e.getKeyCode()) {
                 case KeyEvent.VK_W:
-                    isDriving = false;
+                    player.setIsDriving(false);
                     break;
                 case KeyEvent.VK_D:
-                    goingRight = false;
+                    player.setGoingRight(false);
                     break;
                 case KeyEvent.VK_A:
-                    goingLeft = false;
+                    player.setGoingLeft(false);
                     break;
             }
         }
