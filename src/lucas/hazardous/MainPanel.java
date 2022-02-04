@@ -6,6 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.net.Inet4Address;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,7 +28,7 @@ public class MainPanel extends JPanel implements ActionListener {
     private final List<Integer> mapStartingPoint = new ArrayList<>();
     private final List<Integer> mapTargetPoint = new ArrayList<>();
 
-    private List<Integer> path;
+    private List<List<Integer>> path;
 
     {
         mapTargetPoint.add(0);
@@ -78,6 +79,11 @@ public class MainPanel extends JPanel implements ActionListener {
                     }
                     g.fillRect(tile * TILE_SIZE, row * TILE_SIZE, TILE_SIZE, TILE_SIZE);
                 }
+            }
+
+            for (List<Integer> point: path) {
+                g.setColor(Color.cyan);
+                g.fillRect(point.get(1) * TILE_SIZE+TILE_SIZE/2, point.get(0) * TILE_SIZE+TILE_SIZE/2, 2, 2);
             }
 
             //draw player
