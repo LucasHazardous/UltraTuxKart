@@ -9,11 +9,11 @@ public class Player {
     private final int GAME_WIDTH;
     private int GAME_HEIGHT;
 
-    public Player(int GAME_WIDTH, int GAME_HEIGHT) {
+    public Player(int GAME_WIDTH, int GAME_HEIGHT, int playerX, int playerY) {
         this.GAME_HEIGHT = GAME_HEIGHT;
         this.GAME_WIDTH = GAME_WIDTH;
-        this.playerX = GAME_WIDTH/2;
-        this.playerY = GAME_HEIGHT/2;
+        this.playerX = playerX;
+        this.playerY = playerY;
         this.lineX = this.playerX;
         this.lineY = this.playerY;
     }
@@ -53,8 +53,8 @@ public class Player {
     //coordinates for drawing vector
     private int lastPlayerX = playerX;
     private int lastPlayerY = playerY;
-    private int lineX = playerX;
-    private int lineY = playerY;
+    private int lineX;
+    private int lineY;
 
     //methods for accessing variables from MainPanel
     public void setIsDriving(boolean isDriving) {
