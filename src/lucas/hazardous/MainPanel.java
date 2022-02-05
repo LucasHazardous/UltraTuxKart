@@ -30,8 +30,12 @@ public class MainPanel extends JPanel implements ActionListener {
     //path from mapStartingPoint to mapTargetPoint
     private List<List<Integer>> path;
 
-    //set points for path and calculate path
+    private GameBot bot1;
+
+    private static final int BOT_SIZE = 20;
+
     {
+        //set points for path and calculate path
         mapTargetPoint.add(0);
         mapTargetPoint.add(map[0].length - 1);
 
@@ -39,7 +43,10 @@ public class MainPanel extends JPanel implements ActionListener {
         mapStartingPoint.add(0);
 
         path = findPathToTarget(mapTargetPoint, mapStartingPoint, new ArrayList<List<Integer>>(), new ArrayList<List<Integer>>());
-        System.out.println(path);
+
+        //initialize new game bot
+        bot1 = new GameBot(path, TILE_SIZE);
+        bot1.start();
     }
 
     //essential variables
@@ -92,6 +99,9 @@ public class MainPanel extends JPanel implements ActionListener {
             //draw speed vector
             g.setColor(Color.red);
             g.drawLine(player.getPlayerX(), player.getPlayerY(), player.getLineX(), player.getLineY());
+
+            //draw bot
+            g.drawRect(bot1.getBotX(), bot1.getBotY(), BOT_SIZE, BOT_SIZE);
         }
     }
 
