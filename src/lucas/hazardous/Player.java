@@ -7,7 +7,7 @@ import java.io.IOException;
 
 public class Player {
     private final int GAME_WIDTH;
-    private int GAME_HEIGHT;
+    private final int GAME_HEIGHT;
 
     public Player(int GAME_WIDTH, int GAME_HEIGHT, int playerX, int playerY) {
         this.GAME_HEIGHT = GAME_HEIGHT;
@@ -18,7 +18,7 @@ public class Player {
         this.lineY = this.playerY;
     }
 
-    public static final int MAX_PLAYER_SPEED = 2;
+    public static final double MAX_PLAYER_SPEED = 0.8;
 
     public static final int PLAYER_SIZE = 20;
 
@@ -35,11 +35,6 @@ public class Player {
     private int speedTime = 0;
     private static final int TIME_TO_REACH_MAX_SPEED = 7;
 
-    private float directionPlayerY = -1f;
-    private boolean mainDir = true;
-    private int directionChanger1 = 1;
-    private int directionChanger2 = 1;
-
     //player's image
     public static BufferedImage PLAYER_IMG;
     static {
@@ -55,6 +50,12 @@ public class Player {
     private int lastPlayerY = playerY;
     private int lineX;
     private int lineY;
+
+    //speed vector rotation angle
+    private double angle = 340;
+
+    //temporary storage for changing angle to radians
+    private double angleRadians;
 
     //methods for accessing variables from MainPanel
     public void setIsDriving(boolean isDriving) {
@@ -90,31 +91,11 @@ public class Player {
         lastPlayerX = playerX;
         lastPlayerY = playerY;
 
-        //change speed on x-axis
-        if(goingLeft) {
-            directionChanger1 = 1;
-            directionChanger2 = -1;
-        } else if(goingRight) {
-            directionChanger1 = -1;
-            directionChanger2 = 1;
-        }
+        angleRadians = Math.toRadians(angle);
+        playerX += (int) ((Math.cos(angleRadians) * (Math.pow(speedTime, 2) * MAX_PLAYER_SPEED/2)) - Math.sin(angleRadians)*(Math.pow(speedTime, 1.3) * MAX_PLAYER_SPEED/2));
+        playerY += (int) ((Math.sin(angleRadians) * (Math.pow(speedTime, 2) * MAX_PLAYER_SPEED/2)) + Math.cos(angleRadians)*(Math.pow(speedTime, 1.3) * MAX_PLAYER_SPEED/2));
 
-        if(directionPlayerY > 0f) {
-            if (mainDir) {
-                playerX += (Math.pow(speedTime, 1.3) * MAX_PLAYER_SPEED) / 2 * directionChanger1*(1f - directionPlayerY);
-            } else {
-                playerX += (Math.pow(speedTime, 1.3) * MAX_PLAYER_SPEED) / 2 *directionChanger2* (1f - directionPlayerY);
-            }
-        } else {
-            if (mainDir) {
-                playerX += (Math.pow(speedTime, 1.3) * MAX_PLAYER_SPEED) / 2 * directionChanger1*(1f + directionPlayerY);
-            } else {
-                playerX += (Math.pow(speedTime, 1.3) * MAX_PLAYER_SPEED) / 2 *directionChanger2* (1f + directionPlayerY);
-            }
-        }
-
-        //change speed on y-axis
-        playerY += (Math.pow(speedTime, 1.3) * MAX_PLAYER_SPEED) / 2 * directionPlayerY;
+        //change values used for drawing vectors
         lineX = playerX*2-lastPlayerX;
         lineY = playerY*2-lastPlayerY;
     }
@@ -122,20 +103,12 @@ public class Player {
     public void playerMove() {
         if (isDriving) {
             //change rotation of speed vector
-            if (goingRight || goingLeft) {
-                if (directionPlayerY <= -1f) {
-                    mainDir = false;
-                }
-
-                if (directionPlayerY >= 1f) {
-                    mainDir = true;
-                }
-
-                if (mainDir) {
-                    directionPlayerY -= .2f;
-                } else {
-                    directionPlayerY += .2f;
-                }
+            if(goingRight) {
+                angle += 20;
+                if(angle >= 360) angle=0;
+            } else if(goingLeft) {
+                angle -= 20;
+                if(angle <= 0) angle=360;
             }
 
             //change speed
