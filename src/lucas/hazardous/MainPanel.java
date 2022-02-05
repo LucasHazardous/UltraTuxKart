@@ -19,8 +19,8 @@ public class MainPanel extends JPanel implements ActionListener {
     private final byte[][] map = new byte[][]{
             {0, 0, 0, 1, 1},
             {0, 0, 1, 1, 1},
-            {0, 0, 1, 1, 0},
-            {0, 0, 0, 1, 1},
+            {0, 1, 1, 1, 0},
+            {0, 0, 1, 1, 1},
             {1, 1, 1, 1, 1}
     };
 
@@ -38,7 +38,7 @@ public class MainPanel extends JPanel implements ActionListener {
         mapStartingPoint.add(map.length - 1);
         mapStartingPoint.add(0);
 
-        path = findPathToTarget(mapTargetPoint, mapStartingPoint, new ArrayList(), new ArrayList());
+        path = findPathToTarget(mapTargetPoint, mapStartingPoint, new ArrayList<List<Integer>>(), new ArrayList<List<Integer>>());
         System.out.println(path);
     }
 
@@ -127,7 +127,7 @@ public class MainPanel extends JPanel implements ActionListener {
 
             //check every possible location
             for (int[] option : options) {
-                currentOptionButList = new ArrayList();
+                currentOptionButList = new ArrayList<Integer>();
                 currentOptionButList.add(option[0]);
                 currentOptionButList.add(option[1]);
 
@@ -135,11 +135,11 @@ public class MainPanel extends JPanel implements ActionListener {
                 if ((option[0] >= 0) && (option[0] < map.length) && (option[1] >= 0) && (option[1] < map[0].length)
                         && map[option[0]][option[1]] == 1 && !visited.contains(currentOptionButList)) {
 
-                    tmpResult = findPathToTarget(targetPosition, currentOptionButList, new ArrayList(result), new ArrayList(visited));
+                    tmpResult = findPathToTarget(targetPosition, currentOptionButList, new ArrayList<List<Integer>>(result), new ArrayList<List<Integer>>(visited));
 
-                    if (tmpResult.size() < bestResultLength && tmpResult.size() != 0) {
+                    if (tmpResult.size() < bestResultLength && tmpResult.size() != 0 && tmpResult.get(tmpResult.size()-1).equals(targetPosition)) {
                         bestResultLength = tmpResult.size();
-                        result = new ArrayList(tmpResult);
+                        result = new ArrayList<List<Integer>>(tmpResult);
                     }
                 }
             }
