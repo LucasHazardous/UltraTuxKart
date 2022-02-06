@@ -9,6 +9,8 @@ public class GameBot extends Thread{
     private int botX;
     private int botY;
 
+    public static final int BOT_SIZE = 20;
+
     public int getBotX() {
         return botX;
     }
@@ -25,8 +27,8 @@ public class GameBot extends Thread{
     @Override
     public void run() {
         for(int i = 0; i < path.size(); i++) {
-            botX = path.get(i).get(1) * TILE_SIZE+TILE_SIZE/2;
-            botY = path.get(i).get(0) * TILE_SIZE+TILE_SIZE/2;
+            botX = path.get(i).get(1) * TILE_SIZE+TILE_SIZE/2-BOT_SIZE/2;
+            botY = path.get(i).get(0) * TILE_SIZE+TILE_SIZE/2-BOT_SIZE/2;
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {}

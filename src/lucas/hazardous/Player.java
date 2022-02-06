@@ -91,7 +91,6 @@ public class Player {
         lastPlayerX = playerX;
         lastPlayerY = playerY;
 
-        angleRadians = Math.toRadians(angle);
         playerX += (int) ((Math.cos(angleRadians) * (Math.pow(speedTime, 2) * MAX_PLAYER_SPEED/2)) - Math.sin(angleRadians)*(Math.pow(speedTime, 1.3) * MAX_PLAYER_SPEED/2));
         playerY += (int) ((Math.sin(angleRadians) * (Math.pow(speedTime, 2) * MAX_PLAYER_SPEED/2)) + Math.cos(angleRadians)*(Math.pow(speedTime, 1.3) * MAX_PLAYER_SPEED/2));
 
@@ -106,9 +105,11 @@ public class Player {
             if(goingRight) {
                 angle += 20;
                 if(angle >= 360) angle=0;
+                angleRadians = Math.toRadians(angle);
             } else if(goingLeft) {
                 angle -= 20;
                 if(angle <= 0) angle=360;
+                angleRadians = Math.toRadians(angle);
             }
 
             //change speed

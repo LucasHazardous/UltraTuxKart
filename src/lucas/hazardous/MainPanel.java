@@ -32,8 +32,6 @@ public class MainPanel extends JPanel implements ActionListener {
 
     private GameBot bot1;
 
-    private static final int BOT_SIZE = 20;
-
     {
         //set points for path and calculate path
         mapTargetPoint.add(0);
@@ -54,8 +52,8 @@ public class MainPanel extends JPanel implements ActionListener {
     private final Timer timer;
     private final boolean isGameRunning;
     private final Player player = new Player(GAME_WIDTH, GAME_HEIGHT,
-            mapStartingPoint.get(1) * TILE_SIZE + TILE_SIZE / 2,
-            mapStartingPoint.get(0) * TILE_SIZE + TILE_SIZE / 2);
+            mapStartingPoint.get(1) * TILE_SIZE + TILE_SIZE / 2-Player.PLAYER_SIZE/2,
+            mapStartingPoint.get(0) * TILE_SIZE + TILE_SIZE / 2-Player.PLAYER_SIZE/2);
 
     MainPanel() {
         this.setPreferredSize(new Dimension(GAME_WIDTH, GAME_HEIGHT));
@@ -101,7 +99,7 @@ public class MainPanel extends JPanel implements ActionListener {
             g.drawLine(player.getPlayerX(), player.getPlayerY(), player.getLineX(), player.getLineY());
 
             //draw bot
-            g.drawRect(bot1.getBotX(), bot1.getBotY(), BOT_SIZE, BOT_SIZE);
+            g.drawRect(bot1.getBotX(), bot1.getBotY(), GameBot.BOT_SIZE, GameBot.BOT_SIZE);
         }
     }
 
