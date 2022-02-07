@@ -39,7 +39,7 @@ public class Player {
     public static BufferedImage PLAYER_IMG;
     static {
         try {
-            PLAYER_IMG = ImageIO.read(new File("img.png"));
+            PLAYER_IMG = ImageIO.read(new File("assets/img.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
