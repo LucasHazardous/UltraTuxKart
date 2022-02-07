@@ -99,7 +99,7 @@ public class MainPanel extends JPanel implements ActionListener {
             g.drawLine(player.getPlayerX(), player.getPlayerY(), player.getLineX(), player.getLineY());
 
             //draw bot
-            g.drawRect(bot1.getBotX(), bot1.getBotY(), GameBot.BOT_SIZE, GameBot.BOT_SIZE);
+            g.fillRect(bot1.getBotX(), bot1.getBotY(), GameBot.BOT_SIZE, GameBot.BOT_SIZE);
         }
     }
 
