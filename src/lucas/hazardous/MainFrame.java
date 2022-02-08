@@ -17,11 +17,11 @@ public class MainFrame extends JFrame {
                 String tmp = in.nextLine();
                 for(int i = 0; i < tmp.length(); i++) {
                     this.map[j][i] = (byte) (tmp.charAt(i)-48);
-                    System.out.println(this.map[j][i]);
                 }
                 j++;
             }
             MainPanel.setMap(map);
+            JOptionPane.showMessageDialog(this, "Map loaded.");
         } catch (FileNotFoundException e) {
             JOptionPane.showMessageDialog(this, "File not found.");
         }

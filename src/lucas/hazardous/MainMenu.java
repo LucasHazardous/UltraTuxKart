@@ -17,6 +17,7 @@ public class MainMenu extends JPanel {
     private Image background;
 
     public MainMenu(MainFrame parentFrame) {
+        this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
         this.setPreferredSize(new Dimension(MENU_WIDTH, MENU_HEIGHT));
         this.setFocusable(true);
 
