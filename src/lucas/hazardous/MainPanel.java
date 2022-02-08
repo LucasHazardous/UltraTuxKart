@@ -16,13 +16,17 @@ public class MainPanel extends JPanel implements ActionListener {
     private static final int TILE_SIZE = 100;
 
     //game map
-    private final byte[][] map = new byte[][]{
+    private static byte[][] map = new byte[][]{
             {0, 0, 0, 1, 1},
             {0, 0, 1, 1, 1},
             {0, 1, 1, 1, 0},
             {0, 0, 1, 1, 1},
             {1, 1, 1, 1, 1}
     };
+
+    public static void setMap(byte[][] map) {
+        MainPanel.map = map;
+    }
 
     private final List<Integer> mapStartingPoint = new ArrayList<>();
     private final List<Integer> mapTargetPoint = new ArrayList<>();
@@ -49,8 +53,8 @@ public class MainPanel extends JPanel implements ActionListener {
 
     //essential variables
     private static final int DELAY = 100;
-    private final Timer timer;
-    private final boolean isGameRunning;
+    private Timer timer;
+    private boolean isGameRunning;
     private final Player player = new Player(GAME_WIDTH, GAME_HEIGHT,
             mapStartingPoint.get(1) * TILE_SIZE + TILE_SIZE / 2-Player.PLAYER_SIZE/2,
             mapStartingPoint.get(0) * TILE_SIZE + TILE_SIZE / 2-Player.PLAYER_SIZE/2);
@@ -86,6 +90,7 @@ public class MainPanel extends JPanel implements ActionListener {
                 }
             }
 
+            //draw path for bot
             for (List<Integer> point : path) {
                 g.setColor(Color.cyan);
                 g.fillRect(point.get(1) * TILE_SIZE + TILE_SIZE / 2, point.get(0) * TILE_SIZE + TILE_SIZE / 2, 2, 2);
