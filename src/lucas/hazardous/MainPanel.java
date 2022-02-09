@@ -1,11 +1,14 @@
 package lucas.hazardous;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -59,6 +62,9 @@ public class MainPanel extends JPanel implements ActionListener {
             mapStartingPoint.get(1) * TILE_SIZE + TILE_SIZE / 2-Player.PLAYER_SIZE/2,
             mapStartingPoint.get(0) * TILE_SIZE + TILE_SIZE / 2-Player.PLAYER_SIZE/2);
 
+    //image displayed when game ends
+    private Image endPicture;
+
     MainPanel() {
         this.setPreferredSize(new Dimension(GAME_WIDTH, GAME_HEIGHT));
         this.setBackground(Color.black);
@@ -73,7 +79,11 @@ public class MainPanel extends JPanel implements ActionListener {
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        drawEverything(g);
+        if(isGameRunning) {
+            drawEverything(g);
+        } else {
+            g.drawImage(endPicture, 0, 0, null);
+        }
     }
 
     private void drawEverything(Graphics g) {
@@ -85,6 +95,13 @@ public class MainPanel extends JPanel implements ActionListener {
                         g.setColor(Color.gray);
                     } else {
                         g.setColor(Color.green);
+                        if((tile+1)*TILE_SIZE > player.getPlayerX() &&
+                                tile*TILE_SIZE < player.getPlayerX() &&
+                                (row+1)*TILE_SIZE > player.getPlayerY() &&
+                                row*TILE_SIZE < player.getPlayerY()
+                        ) {
+                            endGame();
+                        }
                     }
                     g.fillRect(tile * TILE_SIZE, row * TILE_SIZE, TILE_SIZE, TILE_SIZE);
                 }
@@ -106,6 +123,16 @@ public class MainPanel extends JPanel implements ActionListener {
             //draw bot
             g.fillRect(bot1.getBotX(), bot1.getBotY(), GameBot.BOT_SIZE, GameBot.BOT_SIZE);
         }
+    }
+
+    private void endGame() {
+        isGameRunning = false;
+        timer.stop();
+        try {
+            //Photo by Carlos from Pexels
+            endPicture = ImageIO.read(new File("assets/vulcan.jpg"));
+            repaint();
+        } catch (IOException e) {}
     }
 
     //find path on map from starting point to target
