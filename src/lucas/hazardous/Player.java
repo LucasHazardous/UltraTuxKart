@@ -52,10 +52,10 @@ public class Player {
     private int lineY;
 
     //speed vector rotation angle
-    private double angle = 340;
+    private double angle = 270;
 
     //temporary storage for changing angle to radians
-    private double angleRadians;
+    private double angleRadians = Math.toRadians(angle);
 
     //methods for accessing variables from MainPanel
     public void setIsDriving(boolean isDriving) {
@@ -84,6 +84,10 @@ public class Player {
 
     public int getLineY() {
         return lineY;
+    }
+
+    public double getAngleRadians() {
+        return angleRadians;
     }
 
     private void movePlayerWithDirection() {
@@ -126,20 +130,21 @@ public class Player {
                 movePlayerWithDirection();
             }
         }
+
         //checks to prevent player from going out of the window
-        if (playerX < 0) {
-            playerX = 0;
+        if (playerX <= 0) {
+            playerX = 1;
         }
-        if (playerY < 0) {
-            playerY = 0;
-        }
-
-        if (playerX > GAME_WIDTH - PLAYER_SIZE) {
-            playerX = GAME_WIDTH - PLAYER_SIZE;
+        if (playerY <= 0) {
+            playerY = 1;
         }
 
-        if (playerY > GAME_HEIGHT - PLAYER_SIZE) {
-            playerY = GAME_HEIGHT - PLAYER_SIZE;
+        if (playerX >= GAME_WIDTH - PLAYER_SIZE) {
+            playerX = GAME_WIDTH - PLAYER_SIZE-1;
+        }
+
+        if (playerY >= GAME_HEIGHT - PLAYER_SIZE) {
+            playerY = GAME_HEIGHT - PLAYER_SIZE-1;
         }
     }
 }
