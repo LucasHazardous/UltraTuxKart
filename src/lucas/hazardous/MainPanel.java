@@ -62,9 +62,6 @@ public class MainPanel extends JPanel implements ActionListener {
             mapStartingPoint.get(1) * TILE_SIZE + TILE_SIZE / 2-Player.PLAYER_SIZE/2,
             mapStartingPoint.get(0) * TILE_SIZE + TILE_SIZE / 2-Player.PLAYER_SIZE/2);
 
-    //image displayed when game ends
-    private Image endPicture;
-
     MainPanel() {
         this.setPreferredSize(new Dimension(GAME_WIDTH, GAME_HEIGHT));
         this.setBackground(Color.black);
@@ -79,11 +76,7 @@ public class MainPanel extends JPanel implements ActionListener {
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        if(isGameRunning) {
-            drawEverything(g);
-        } else {
-            g.drawImage(endPicture, 0, 0, null);
-        }
+        drawEverything(g);
     }
 
     private void drawEverything(Graphics g) {
@@ -100,7 +93,7 @@ public class MainPanel extends JPanel implements ActionListener {
                                 (row+1)*TILE_SIZE > player.getPlayerY() &&
                                 row*TILE_SIZE < player.getPlayerY()
                         ) {
-                            endGame();
+                            isGameRunning = false;
                         }
                     }
                     g.fillRect(tile * TILE_SIZE, row * TILE_SIZE, TILE_SIZE, TILE_SIZE);
@@ -122,16 +115,23 @@ public class MainPanel extends JPanel implements ActionListener {
 
             //draw bot
             g.fillRect(bot1.getBotX(), bot1.getBotY(), GameBot.BOT_SIZE, GameBot.BOT_SIZE);
+        } else {
+            endGame(g);
+            timer.stop();
         }
     }
 
-    private void endGame() {
-        isGameRunning = false;
-        timer.stop();
+    //show endgame screen when player interacts with the green
+    private void endGame(Graphics g) {
         try {
             //Photo by Carlos from Pexels
-            endPicture = ImageIO.read(new File("assets/vulcan.jpg"));
-            repaint();
+            Image endPicture = ImageIO.read(new File("assets/vulcan.jpg"));
+            g.drawImage(endPicture, 0, 0, null);
+            g.setFont(new Font("Monospaced", Font.BOLD, TILE_SIZE/5));
+            g.setColor(new Color(55, 255, 0));
+            FontMetrics metrics = getFontMetrics(g.getFont());
+            String endgameText = "Ethereal operator ceased existence.";
+            g.drawString(endgameText, (GAME_WIDTH - metrics.stringWidth(endgameText))/2, GAME_HEIGHT/2);
         } catch (IOException e) {}
     }
 
