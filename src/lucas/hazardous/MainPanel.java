@@ -14,6 +14,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+//Photo by Carlos from Pexels - vulcan.jpg
+//Photo by Kateryna Babaieva from Pexels - factory.jpg
+
 public class MainPanel extends JPanel implements ActionListener {
     //sizes of components
     private static final int GAME_WIDTH = 500;
@@ -121,23 +124,30 @@ public class MainPanel extends JPanel implements ActionListener {
 
             //draw bot
             g.fillRect(bot1.getBotX(), bot1.getBotY(), GameBot.BOT_SIZE, GameBot.BOT_SIZE);
+
+            //check if player reached the target
+            if(player.getPlayerX() > mapTargetPoint.get(1)*TILE_SIZE &&
+                    player.getPlayerX() < (mapTargetPoint.get(1)+1)*TILE_SIZE &&
+                    player.getPlayerY() > mapTargetPoint.get(0)*TILE_SIZE &&
+                    player.getPlayerY() < (mapTargetPoint.get(0)+1)*TILE_SIZE) {
+                endGame(g, "assets/factory.jpg", "Noxious conditions evaded.");
+                timer.stop();
+            }
         } else {
-            endGame(g);
+            endGame(g, "assets/vulcan.jpg", "Ethereal operator ceased existence.");
             timer.stop();
         }
     }
 
     //show endgame screen when player interacts with the green
-    private void endGame(Graphics g) {
+    private void endGame(Graphics g, String imagePath, String text) {
         try {
-            //Photo by Carlos from Pexels
-            Image endPicture = ImageIO.read(new File("assets/vulcan.jpg"));
+            Image endPicture = ImageIO.read(new File(imagePath));
             g.drawImage(endPicture, 0, 0, null);
             g.setFont(new Font("Monospaced", Font.BOLD, TILE_SIZE/5));
             g.setColor(new Color(55, 255, 0));
             FontMetrics metrics = getFontMetrics(g.getFont());
-            String endgameText = "Ethereal operator ceased existence.";
-            g.drawString(endgameText, (GAME_WIDTH - metrics.stringWidth(endgameText))/2, GAME_HEIGHT/2);
+            g.drawString(text, (GAME_WIDTH - metrics.stringWidth(text))/2, GAME_HEIGHT/2);
         } catch (IOException e) {}
     }
 
