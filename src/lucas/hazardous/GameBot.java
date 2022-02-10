@@ -22,16 +22,37 @@ public class GameBot extends Thread{
     public GameBot(List<List<Integer>> path, int TILE_SIZE) {
         this.path = path;
         this.TILE_SIZE = TILE_SIZE;
+
+        botX = path.get(0).get(1) * TILE_SIZE+TILE_SIZE/2-BOT_SIZE/2;
+        botY = path.get(0).get(0) * TILE_SIZE+TILE_SIZE/2-BOT_SIZE/2;
     }
 
     @Override
     public void run() {
-        for(int i = 0; i < path.size(); i++) {
-            botX = path.get(i).get(1) * TILE_SIZE+TILE_SIZE/2-BOT_SIZE/2;
-            botY = path.get(i).get(0) * TILE_SIZE+TILE_SIZE/2-BOT_SIZE/2;
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {}
+        int targetX;
+        int targetY;
+        for(int i = 1; i < path.size(); i++) {
+            targetX = path.get(i).get(1) * TILE_SIZE+TILE_SIZE/2-BOT_SIZE/2;
+            targetY = path.get(i).get(0) * TILE_SIZE+TILE_SIZE/2-BOT_SIZE/2;
+
+            while (
+                botX != targetX ||
+                botY != targetY
+            ) {
+                try { Thread.sleep(100); } catch (InterruptedException e) {}
+
+                if(targetX > botX) {
+                    botX += BOT_SIZE/2;
+                } else if (targetX < botX){
+                    botX -= BOT_SIZE/2;
+                }
+
+                if(targetY > botY) {
+                    botY += BOT_SIZE/2;
+                } else if(targetY < botY) {
+                    botY -= BOT_SIZE/2;
+                }
+            }
         }
     }
 }
