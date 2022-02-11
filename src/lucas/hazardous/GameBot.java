@@ -8,6 +8,7 @@ public class GameBot extends Thread{
     private int TILE_SIZE;
     private int botX;
     private int botY;
+    private boolean taskCompleted = false;
 
     public static final int BOT_SIZE = 20;
 
@@ -17,6 +18,10 @@ public class GameBot extends Thread{
 
     public int getBotY() {
         return botY;
+    }
+
+    public boolean isTaskCompleted() {
+        return taskCompleted;
     }
 
     public GameBot(List<List<Integer>> path, int TILE_SIZE) {
@@ -54,5 +59,6 @@ public class GameBot extends Thread{
                 }
             }
         }
+        taskCompleted = true;
     }
 }

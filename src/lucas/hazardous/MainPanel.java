@@ -133,6 +133,8 @@ public class MainPanel extends JPanel implements ActionListener {
                 endGame(g, "assets/factory.jpg", "Noxious conditions evaded.");
                 timer.stop();
             }
+
+            if(bot1.isTaskCompleted()) isGameRunning = false;
         } else {
             endGame(g, "assets/vulcan.jpg", "Ethereal operator ceased existence.");
             timer.stop();
