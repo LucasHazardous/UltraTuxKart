@@ -8,6 +8,11 @@ import java.util.Scanner;
 public class MainFrame extends JFrame {
     private MainMenu Menu = new MainMenu(this);
     private byte[][] map = new byte[5][5];
+    private boolean isBotEnabled = true;
+
+    public void setBotEnabled(boolean botEnabled) {
+        isBotEnabled = botEnabled;
+    }
 
     public void setMap(File mapPath) {
         try {
@@ -29,6 +34,7 @@ public class MainFrame extends JFrame {
 
     public void changePanel() {
         this.getContentPane().removeAll();
+        MainPanel.setIsBotEnabled(isBotEnabled);
         MainPanel game = new MainPanel();
         this.add(game);
         this.setFocusable(true);

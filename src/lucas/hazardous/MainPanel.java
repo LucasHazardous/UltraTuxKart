@@ -23,6 +23,13 @@ public class MainPanel extends JPanel implements ActionListener {
     private static final int GAME_HEIGHT = 500;
     private static final int TILE_SIZE = 100;
 
+    //is bot present in the game
+    private static boolean isBotEnabled;
+
+    public static void setIsBotEnabled(boolean isBotEnabled) {
+        MainPanel.isBotEnabled = isBotEnabled;
+    }
+
     //game map
     private static byte[][] map = new byte[][]{
             {0, 0, 0, 1, 1},
@@ -45,18 +52,21 @@ public class MainPanel extends JPanel implements ActionListener {
     private GameBot bot1;
 
     {
-        //set points for path and calculate path
+        //set points for player and bot's path
         mapTargetPoint.add(0);
         mapTargetPoint.add(map[0].length - 1);
 
         mapStartingPoint.add(map.length - 1);
         mapStartingPoint.add(0);
 
+        //calculate the fastest path for bot
         path = findPathToTarget(mapTargetPoint, mapStartingPoint, new ArrayList<List<Integer>>(), new ArrayList<List<Integer>>());
 
-        //initialize new game bot
-        bot1 = new GameBot(path, TILE_SIZE);
-        bot1.start();
+        if(isBotEnabled) {
+            //initialize new game bot
+            bot1 = new GameBot(path, TILE_SIZE);
+            bot1.start();
+        }
     }
 
     //essential variables
@@ -123,6 +133,7 @@ public class MainPanel extends JPanel implements ActionListener {
             g.drawLine(player.getPlayerX(), player.getPlayerY(), player.getLineX(), player.getLineY());
 
             //draw bot
+            if(isBotEnabled)
             g.fillRect(bot1.getBotX(), bot1.getBotY(), GameBot.BOT_SIZE, GameBot.BOT_SIZE);
 
             //check if player reached the target
@@ -134,7 +145,7 @@ public class MainPanel extends JPanel implements ActionListener {
                 timer.stop();
             }
 
-            if(bot1.isTaskCompleted()) isGameRunning = false;
+            if(isBotEnabled && bot1.isTaskCompleted()) isGameRunning = false;
         } else {
             endGame(g, "assets/vulcan.jpg", "Ethereal operator ceased existence.");
             timer.stop();
