@@ -1,4 +1,4 @@
-package lucas.hazardous;
+package lucas.hazardous.ultratuxkart;
 
 public class Main {
 

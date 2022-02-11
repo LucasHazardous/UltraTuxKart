@@ -1,4 +1,4 @@
-package lucas.hazardous;
+package lucas.hazardous.ultratuxkart;
 
 import javax.swing.*;
 import java.io.File;

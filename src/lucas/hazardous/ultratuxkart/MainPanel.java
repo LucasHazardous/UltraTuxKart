@@ -1,4 +1,4 @@
-package lucas.hazardous;
+package lucas.hazardous.ultratuxkart;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
