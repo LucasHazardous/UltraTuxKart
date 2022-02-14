@@ -6,7 +6,7 @@ import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 public class MainFrame extends JFrame {
-    private MainMenu Menu = new MainMenu(this);
+    private MainMenu menu = new MainMenu(this);
     private byte[][] map = new byte[5][5];
     private boolean isBotEnabled = true;
 
@@ -32,10 +32,10 @@ public class MainFrame extends JFrame {
         }
     }
 
-    public void changePanel() {
+    public void changePanelToGame() {
         this.getContentPane().removeAll();
         MainPanel.setIsBotEnabled(isBotEnabled);
-        MainPanel game = new MainPanel();
+        MainPanel game = new MainPanel(this);
         this.add(game);
         this.setFocusable(true);
         this.revalidate();
@@ -43,8 +43,15 @@ public class MainFrame extends JFrame {
         game.requestFocus(false);
     }
 
+    public void changePanelToMenu() {
+        this.getContentPane().removeAll();
+        this.add(menu);
+        this.revalidate();
+        this.repaint();
+    }
+
     MainFrame() {
-        this.add(Menu);
+        this.add(menu);
         this.setTitle("UltraTuxKart");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setResizable(false);

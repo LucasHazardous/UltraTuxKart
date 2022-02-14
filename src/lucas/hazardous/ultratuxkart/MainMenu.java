@@ -1,7 +1,5 @@
 package lucas.hazardous.ultratuxkart;
 
-import lucas.hazardous.ultratuxkart.MainFrame;
-
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -25,7 +23,7 @@ public class MainMenu extends JPanel {
 
         //button for starting the game
         JButton btnSwitch = new JButton("Play");
-        btnSwitch.addActionListener(e -> parentFrame.changePanel());
+        btnSwitch.addActionListener(e -> parentFrame.changePanelToGame());
         this.add(btnSwitch);
 
         //loading custom map

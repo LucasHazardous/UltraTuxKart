@@ -77,7 +77,13 @@ public class MainPanel extends JPanel implements ActionListener {
             mapStartingPoint.get(1) * TILE_SIZE + TILE_SIZE / 2-Player.PLAYER_SIZE/2,
             mapStartingPoint.get(0) * TILE_SIZE + TILE_SIZE / 2-Player.PLAYER_SIZE/2);
 
-    MainPanel() {
+    private MainFrame parentFrame;
+
+    private boolean newButtonAllowed = true;
+
+    MainPanel(MainFrame parentFrame) {
+        this.parentFrame = parentFrame;
+
         this.setPreferredSize(new Dimension(GAME_WIDTH, GAME_HEIGHT));
         this.setBackground(Color.black);
         this.setFocusable(true);
@@ -157,11 +163,19 @@ public class MainPanel extends JPanel implements ActionListener {
         try {
             Image endPicture = ImageIO.read(new File(imagePath));
             g.drawImage(endPicture, 0, 0, null);
+
             g.setFont(new Font("Monospaced", Font.BOLD, TILE_SIZE/5));
             g.setColor(new Color(55, 255, 0));
             FontMetrics metrics = getFontMetrics(g.getFont());
             g.drawString(text, (GAME_WIDTH - metrics.stringWidth(text))/2, GAME_HEIGHT/2);
         } catch (IOException e) {}
+        if(newButtonAllowed) {
+            newButtonAllowed = false;
+            JButton exitButton = new JButton("Return");
+            exitButton.addActionListener(e -> parentFrame.changePanelToMenu());
+            this.add(exitButton);
+            this.revalidate();
+        }
     }
 
     //find path on map from starting point to target
