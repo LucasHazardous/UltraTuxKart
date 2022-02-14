@@ -51,6 +51,10 @@ public class MainPanel extends JPanel implements ActionListener {
 
     private GameBot bot1;
 
+    //variables for pathfinding
+    private int bestResultLength = 0;
+    private List<List<List<Integer>>> results = new ArrayList();
+
     {
         //set points for player and bot's path
         mapTargetPoint.add(0);
@@ -60,7 +64,8 @@ public class MainPanel extends JPanel implements ActionListener {
         mapStartingPoint.add(0);
 
         //calculate the fastest path for bot
-        path = findPathToTarget(mapTargetPoint, mapStartingPoint, new ArrayList<List<Integer>>(), new ArrayList<List<Integer>>());
+        findPathToTarget(mapTargetPoint, mapStartingPoint, new ArrayList<>());
+        path = results.get(results.size()-1);
 
         if(isBotEnabled) {
             //initialize new game bot
@@ -179,16 +184,13 @@ public class MainPanel extends JPanel implements ActionListener {
     }
 
     //find path on map from starting point to target
-    private List findPathToTarget(List<Integer> targetPosition, List<Integer> currentPosition, List solution, List visited) {
+    private List findPathToTarget(List<Integer> targetPosition, List<Integer> currentPosition, List solution) {
         //base case - found point is target point
         if (currentPosition.equals(targetPosition)) {
             solution.add(currentPosition);
             return solution;
         } else {
-            int bestResultLength = 2147483646;
-
-            List result = new ArrayList();
-            result.addAll(solution);
+            List result = new ArrayList<List<Integer>>(solution);
             result.add(currentPosition);
 
             //all locations that are possible to reach from current point
@@ -205,9 +207,6 @@ public class MainPanel extends JPanel implements ActionListener {
             //placeholder for int[] from options
             List currentOptionButList;
 
-            //add current position to visited to avoid visiting it again
-            visited.add(currentPosition);
-
             //check every possible location
             for (int[] option : options) {
                 currentOptionButList = new ArrayList<Integer>();
@@ -216,17 +215,19 @@ public class MainPanel extends JPanel implements ActionListener {
 
                 //check if location exists, if it's a part if path and was not visited
                 if ((option[0] >= 0) && (option[0] < map.length) && (option[1] >= 0) && (option[1] < map[0].length)
-                        && map[option[0]][option[1]] == 1 && !visited.contains(currentOptionButList)) {
+                        && map[option[0]][option[1]] == 1 && !result.contains(currentOptionButList)) {
 
-                    tmpResult = findPathToTarget(targetPosition, currentOptionButList, new ArrayList<List<Integer>>(result), new ArrayList<List<Integer>>(visited));
+                    tmpResult = findPathToTarget(targetPosition, currentOptionButList, new ArrayList<List<Integer>>(result));
 
-                    if (tmpResult.size() < bestResultLength && tmpResult.size() != 0 && tmpResult.get(tmpResult.size()-1).equals(targetPosition)) {
+                    if(bestResultLength == 0) bestResultLength = tmpResult.size();
+
+                    if (tmpResult.size() < bestResultLength && tmpResult.size() > 1 && tmpResult.get(tmpResult.size()-1).equals(targetPosition)) {
                         bestResultLength = tmpResult.size();
                         result = new ArrayList<List<Integer>>(tmpResult);
+                        results.add(result);
                     }
                 }
             }
-
             return result;
         }
     }
