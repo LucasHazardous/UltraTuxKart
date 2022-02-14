@@ -33,10 +33,10 @@ public class MainPanel extends JPanel implements ActionListener {
     //game map
     private static byte[][] map = new byte[][]{
             {0, 0, 0, 1, 1},
-            {0, 0, 1, 1, 1},
-            {0, 1, 1, 1, 0},
-            {0, 0, 1, 1, 1},
-            {1, 1, 1, 1, 1}
+            {0, 0, 0, 1, 0},
+            {0, 0, 0, 1, 0},
+            {0, 0, 0, 1, 0},
+            {1, 1, 1, 1, 0}
     };
 
     public static void setMap(byte[][] map) {
@@ -52,7 +52,7 @@ public class MainPanel extends JPanel implements ActionListener {
     private GameBot bot1;
 
     //variables for pathfinding
-    private int bestResultLength = 0;
+    private int bestResultLength = map.length*map[0].length;
     private List<List<List<Integer>>> results = new ArrayList();
 
     {
@@ -65,7 +65,11 @@ public class MainPanel extends JPanel implements ActionListener {
 
         //calculate the fastest path for bot
         findPathToTarget(mapTargetPoint, mapStartingPoint, new ArrayList<>());
-        path = results.get(results.size()-1);
+        if(results.size() > 0) {
+            path = results.get(results.size() - 1);
+        } else {
+            isBotEnabled = false;
+        }
 
         if(isBotEnabled) {
             //initialize new game bot
@@ -127,9 +131,11 @@ public class MainPanel extends JPanel implements ActionListener {
             }
 
             //draw path for bot
-            for (List<Integer> point : path) {
-                g.setColor(Color.cyan);
-                g.fillRect(point.get(1) * TILE_SIZE + TILE_SIZE / 2, point.get(0) * TILE_SIZE + TILE_SIZE / 2, 2, 2);
+            if(isBotEnabled) {
+                for (List<Integer> point : path) {
+                    g.setColor(Color.cyan);
+                    g.fillRect(point.get(1) * TILE_SIZE + TILE_SIZE / 2, point.get(0) * TILE_SIZE + TILE_SIZE / 2, 2, 2);
+                }
             }
 
             //rotating player's image
@@ -218,8 +224,6 @@ public class MainPanel extends JPanel implements ActionListener {
                         && map[option[0]][option[1]] == 1 && !result.contains(currentOptionButList)) {
 
                     tmpResult = findPathToTarget(targetPosition, currentOptionButList, new ArrayList<List<Integer>>(result));
-
-                    if(bestResultLength == 0) bestResultLength = tmpResult.size();
 
                     if (tmpResult.size() < bestResultLength && tmpResult.size() > 1 && tmpResult.get(tmpResult.size()-1).equals(targetPosition)) {
                         bestResultLength = tmpResult.size();
