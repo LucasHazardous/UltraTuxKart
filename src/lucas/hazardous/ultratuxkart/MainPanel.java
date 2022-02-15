@@ -32,7 +32,7 @@ public class MainPanel extends JPanel implements ActionListener {
 
     //game map
     private static byte[][] map = new byte[][]{
-            {0, 0, 0, 1, 1},
+            {0, 0, 0, 1, 2},
             {0, 0, 0, 1, 0},
             {0, 0, 0, 1, 0},
             {0, 0, 0, 1, 0},
@@ -44,7 +44,11 @@ public class MainPanel extends JPanel implements ActionListener {
     }
 
     private final List<Integer> mapStartingPoint = new ArrayList<>();
-    private final List<Integer> mapTargetPoint = new ArrayList<>();
+    private static List<Integer> mapTargetPoint = new ArrayList<>();
+
+    public static void setMapTargetPoint(List<Integer> mapTargetPoint) {
+        MainPanel.mapTargetPoint = mapTargetPoint;
+    }
 
     //path from mapStartingPoint to mapTargetPoint
     private List<List<Integer>> path;
@@ -55,11 +59,13 @@ public class MainPanel extends JPanel implements ActionListener {
     private int bestResultLength = map.length*map[0].length;
     private List<List<List<Integer>>> results = new ArrayList();
 
-    {
-        //set points for player and bot's path
+    static {
         mapTargetPoint.add(0);
-        mapTargetPoint.add(map[0].length - 1);
+        mapTargetPoint.add(4);
+    }
 
+    {
+        //set starting point
         mapStartingPoint.add(map.length - 1);
         mapStartingPoint.add(0);
 
@@ -137,6 +143,10 @@ public class MainPanel extends JPanel implements ActionListener {
                     g.fillRect(point.get(1) * TILE_SIZE + TILE_SIZE / 2, point.get(0) * TILE_SIZE + TILE_SIZE / 2, 2, 2);
                 }
             }
+
+            //draw target point
+            g.setColor(Color.orange);
+            g.fillRect(mapTargetPoint.get(1)*TILE_SIZE, mapTargetPoint.get(0)*TILE_SIZE, TILE_SIZE, TILE_SIZE);
 
             //rotating player's image
             AffineTransform transform = AffineTransform.getRotateInstance(player.getAngleRadians(), Player.PLAYER_IMG.getWidth()/2, Player.PLAYER_IMG.getHeight()/2);
@@ -221,7 +231,7 @@ public class MainPanel extends JPanel implements ActionListener {
 
                 //check if location exists, if it's a part if path and was not visited
                 if ((option[0] >= 0) && (option[0] < map.length) && (option[1] >= 0) && (option[1] < map[0].length)
-                        && map[option[0]][option[1]] == 1 && !result.contains(currentOptionButList)) {
+                        && map[option[0]][option[1]] != 0 && !result.contains(currentOptionButList)) {
 
                     tmpResult = findPathToTarget(targetPosition, currentOptionButList, new ArrayList<List<Integer>>(result));
 

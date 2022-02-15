@@ -3,6 +3,8 @@ package lucas.hazardous.ultratuxkart;
 import javax.swing.*;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class MainFrame extends JFrame {
@@ -18,14 +20,20 @@ public class MainFrame extends JFrame {
         try {
             Scanner in = new Scanner(mapPath);
             int j = 0;
+            List<Integer> mapTargetPoint = new ArrayList<>();
             while (in.hasNextLine()) {
                 String tmp = in.nextLine();
                 for(int i = 0; i < tmp.length(); i++) {
                     this.map[j][i] = (byte) (tmp.charAt(i)-48);
+                    if(this.map[j][i] == 2) {
+                        mapTargetPoint.add(j);
+                        mapTargetPoint.add(i);
+                    }
                 }
                 j++;
             }
             MainPanel.setMap(map);
+            MainPanel.setMapTargetPoint(mapTargetPoint);
             JOptionPane.showMessageDialog(this, "Map loaded.");
         } catch (FileNotFoundException e) {
             JOptionPane.showMessageDialog(this, "File not found.");
