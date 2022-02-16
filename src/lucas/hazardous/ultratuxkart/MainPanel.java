@@ -122,7 +122,7 @@ public class MainPanel extends JPanel implements ActionListener {
                 for (int tile = 0; tile < map[row].length; tile++) {
                     if (map[row][tile] == 1) {
                         g.setColor(Color.gray);
-                    } else {
+                    } else if(map[row][tile] == 0) {
                         g.setColor(Color.green);
                         if((tile+1)*TILE_SIZE > player.getPlayerX() &&
                                 tile*TILE_SIZE < player.getPlayerX() &&

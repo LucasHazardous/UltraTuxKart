@@ -107,10 +107,12 @@ public class Player {
         if (isDriving) {
             //change rotation of speed vector
             if(goingRight) {
+                if(speedTime > 3) speedTime -= 1;
                 angle += 20;
                 if(angle >= 360) angle=0;
                 angleRadians = Math.toRadians(angle);
             } else if(goingLeft) {
+                if(speedTime > 3) speedTime -= 1;
                 angle -= 20;
                 if(angle <= 0) angle=360;
                 angleRadians = Math.toRadians(angle);
