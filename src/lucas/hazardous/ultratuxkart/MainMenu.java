@@ -26,6 +26,11 @@ public class MainMenu extends JPanel {
         btnSwitch.addActionListener(e -> parentFrame.changePanelToGame());
         this.add(btnSwitch);
 
+        //button for creating maps
+        JButton btnCreator = new JButton("Create");
+        btnCreator.addActionListener(e -> parentFrame.changePanelToMapCreator());
+        this.add(btnCreator);
+
         //loading custom map
         JButton btnMap = new JButton("Load map");
         btnMap.addActionListener(e -> {

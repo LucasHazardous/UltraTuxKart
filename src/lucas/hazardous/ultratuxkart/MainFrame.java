@@ -58,6 +58,16 @@ public class MainFrame extends JFrame {
         this.repaint();
     }
 
+    public void changePanelToMapCreator() {
+        var tmpCreator = new MainMapCreator();
+        this.getContentPane().removeAll();
+        this.add(tmpCreator);
+        this.setFocusable(true);
+        this.revalidate();
+        this.repaint();
+        tmpCreator.requestFocus(false);
+    }
+
     MainFrame() {
         this.add(menu);
         this.setTitle("UltraTuxKart");
