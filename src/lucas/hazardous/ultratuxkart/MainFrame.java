@@ -34,6 +34,8 @@ public class MainFrame extends JFrame {
             }
             MainPanel.setMap(map);
             MainPanel.setMapTargetPoint(mapTargetPoint);
+            MainMapCreator.setMap(map);
+            MainMapCreator.setMapTargetPoint(mapTargetPoint);
             JOptionPane.showMessageDialog(this, "Map loaded.");
         } catch (FileNotFoundException e) {
             JOptionPane.showMessageDialog(this, "File not found.");
@@ -59,7 +61,7 @@ public class MainFrame extends JFrame {
     }
 
     public void changePanelToMapCreator() {
-        var tmpCreator = new MainMapCreator();
+        var tmpCreator = new MainMapCreator(this);
         this.getContentPane().removeAll();
         this.add(tmpCreator);
         this.setFocusable(true);

@@ -21,7 +21,7 @@ public class MainPanel extends JPanel implements ActionListener {
     //sizes of components
     private static final int GAME_WIDTH = 500;
     private static final int GAME_HEIGHT = 500;
-    private static final int TILE_SIZE = 100;
+    public static final int TILE_SIZE = 100;
 
     //is bot present in the game
     private static boolean isBotEnabled;
@@ -124,16 +124,14 @@ public class MainPanel extends JPanel implements ActionListener {
                         g.setColor(Color.gray);
                     } else if(map[row][tile] == 0) {
                         g.setColor(Color.green);
-                        if((tile+1)*TILE_SIZE > player.getPlayerX() &&
-                                tile*TILE_SIZE < player.getPlayerX() &&
-                                (row+1)*TILE_SIZE > player.getPlayerY() &&
-                                row*TILE_SIZE < player.getPlayerY()
-                        ) {
-                            isGameRunning = false;
-                        }
                     }
                     g.fillRect(tile * TILE_SIZE, row * TILE_SIZE, TILE_SIZE, TILE_SIZE);
                 }
+            }
+
+            //check if player is alive
+            if(map[player.getPlayerY()/TILE_SIZE][player.getPlayerX()/TILE_SIZE] == 0) {
+                isGameRunning = false;
             }
 
             //draw path for bot
