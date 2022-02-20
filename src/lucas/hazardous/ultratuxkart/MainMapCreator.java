@@ -6,6 +6,9 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -90,6 +93,29 @@ public class MainMapCreator extends JPanel {
         @Override
         public void keyPressed(KeyEvent e) {
             if(e.getKeyCode() == KeyEvent.VK_ESCAPE) parentFrame.changePanelToMenu();
+
+            else if(e.getKeyCode() == KeyEvent.VK_SPACE) {
+                File savedMap = new File("custom_map.map");
+
+                try {
+                    if(savedMap.createNewFile()) {
+                        FileWriter fileWriter = new FileWriter("custom_map.map");
+
+                        String result = "";
+                        for (int row = 0; row < map.length; row++) {
+                            for (int tile = 0; tile < map[row].length; tile++) {
+                                result += map[row][tile];
+                            }
+                            result += "\n";
+                        }
+
+                        fileWriter.write(result);
+                        fileWriter.close();
+                    }
+                } catch (IOException ex) {
+                    JOptionPane.showMessageDialog(parentFrame, ex);
+                }
+            }
         }
     }
 }
