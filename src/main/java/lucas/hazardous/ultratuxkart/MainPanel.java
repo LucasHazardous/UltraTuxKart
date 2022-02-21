@@ -11,6 +11,7 @@ import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -166,27 +167,28 @@ public class MainPanel extends JPanel implements ActionListener {
                     player.getPlayerX() < (mapTargetPoint.get(1)+1)*TILE_SIZE &&
                     player.getPlayerY() > mapTargetPoint.get(0)*TILE_SIZE &&
                     player.getPlayerY() < (mapTargetPoint.get(0)+1)*TILE_SIZE) {
-                endGame(g, this.getClass().getClassLoader().getResource("factory.jpg").getPath(), "Noxious conditions evaded.");
+                endGame(g, this.getClass().getClassLoader().getResourceAsStream("factory.jpg"), "Noxious conditions evaded.");
                 timer.stop();
             }
 
             if(isBotEnabled && bot1.isTaskCompleted()) isGameRunning = false;
         } else {
-            endGame(g, this.getClass().getClassLoader().getResource("vulcan.jpg").getPath(), "Ethereal operator ceased existence.");
+            endGame(g, this.getClass().getClassLoader().getResourceAsStream("vulcan.jpg"), "Ethereal operator ceased existence.");
             timer.stop();
         }
     }
 
     //show endgame screen when player interacts with the green
-    private void endGame(Graphics g, String imagePath, String text) {
+    private void endGame(Graphics g, InputStream image, String text) {
         try {
-            Image endPicture = ImageIO.read(new File(imagePath));
+            Image endPicture = ImageIO.read(image);
             g.drawImage(endPicture, 0, 0, null);
 
             g.setFont(new Font("Monospaced", Font.BOLD, TILE_SIZE/5));
             g.setColor(new Color(55, 255, 0));
             FontMetrics metrics = getFontMetrics(g.getFont());
             g.drawString(text, (GAME_WIDTH - metrics.stringWidth(text))/2, GAME_HEIGHT/2);
+            image.close();
         } catch (IOException e) {}
         if(newButtonAllowed) {
             newButtonAllowed = false;
