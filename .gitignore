@@ -1,3 +1,6 @@
 .idea
 ultratuxkart.iml
 out/
+.gradle
+build/
+gradle/

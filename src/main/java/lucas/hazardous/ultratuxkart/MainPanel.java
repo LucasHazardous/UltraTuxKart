@@ -166,13 +166,13 @@ public class MainPanel extends JPanel implements ActionListener {
                     player.getPlayerX() < (mapTargetPoint.get(1)+1)*TILE_SIZE &&
                     player.getPlayerY() > mapTargetPoint.get(0)*TILE_SIZE &&
                     player.getPlayerY() < (mapTargetPoint.get(0)+1)*TILE_SIZE) {
-                endGame(g, "assets/factory.jpg", "Noxious conditions evaded.");
+                endGame(g, this.getClass().getClassLoader().getResourceAsStream("factory.jpg").toString(), "Noxious conditions evaded.");
                 timer.stop();
             }
 
             if(isBotEnabled && bot1.isTaskCompleted()) isGameRunning = false;
         } else {
-            endGame(g, "assets/vulcan.jpg", "Ethereal operator ceased existence.");
+            endGame(g, this.getClass().getClassLoader().getResourceAsStream("vulcan.jpg").toString(), "Ethereal operator ceased existence.");
             timer.stop();
         }
     }

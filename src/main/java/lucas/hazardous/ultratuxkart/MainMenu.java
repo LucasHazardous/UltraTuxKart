@@ -58,7 +58,7 @@ public class MainMenu extends JPanel {
         //loading main menu background image
         try {
             //Photo by thiago japyassu from Pexels
-            background = ImageIO.read(new File("assets/background.jpg"));
+            background = ImageIO.read(this.getClass().getClassLoader().getResourceAsStream("background.jpg"));
         } catch (IOException e) {
             e.printStackTrace();
         }

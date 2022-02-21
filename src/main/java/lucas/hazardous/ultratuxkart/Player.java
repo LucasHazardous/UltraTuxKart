@@ -37,9 +37,9 @@ public class Player {
 
     //player's image
     public static BufferedImage PLAYER_IMG;
-    static {
+    {
         try {
-            PLAYER_IMG = ImageIO.read(new File("assets/img.png"));
+            PLAYER_IMG = ImageIO.read(this.getClass().getClassLoader().getResourceAsStream("img.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
