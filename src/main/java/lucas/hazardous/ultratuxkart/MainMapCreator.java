@@ -72,7 +72,7 @@ public class MainMapCreator extends JPanel {
         public void mouseClicked(MouseEvent e) {
             int tmpX = e.getX()/TILE_SIZE;
             int tmpY = e.getY()/TILE_SIZE;
-            map[tmpY][tmpX] = (byte) (map[tmpY][tmpX] == 0 ? 1 : 0);
+            if(map[tmpY][tmpX] != 2) map[tmpY][tmpX] = (byte) (map[tmpY][tmpX] == 0 ? 1 : 0);
             repaint();
         }
 
