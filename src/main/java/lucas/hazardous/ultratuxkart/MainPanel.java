@@ -95,8 +95,6 @@ public class MainPanel extends JPanel implements ActionListener {
 
     private MainFrame parentFrame;
 
-    private boolean newButtonAllowed = true;
-
     MainPanel(MainFrame parentFrame) {
         this.parentFrame = parentFrame;
 
@@ -190,13 +188,6 @@ public class MainPanel extends JPanel implements ActionListener {
             g.drawString(text, (GAME_WIDTH - metrics.stringWidth(text))/2, GAME_HEIGHT/2);
             image.close();
         } catch (IOException e) {}
-        if(newButtonAllowed) {
-            newButtonAllowed = false;
-            JButton exitButton = new JButton("Return");
-            exitButton.addActionListener(e -> parentFrame.changePanelToMenu());
-            this.add(exitButton);
-            this.revalidate();
-        }
     }
 
     //find path on map from starting point to target
@@ -267,6 +258,9 @@ public class MainPanel extends JPanel implements ActionListener {
                     break;
                 case KeyEvent.VK_A:
                     player.setGoingLeft(true);
+                    break;
+                case KeyEvent.VK_ESCAPE:
+                    parentFrame.changePanelToMenu();
                     break;
             }
         }

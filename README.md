@@ -11,7 +11,7 @@ Once you are in the game play the Play button.
 
 ## Controls
 
-**WASD keys to control the car, ESC to exit map creator, SPACE to save map and simply left click to replace a tile on the map.**
+**WASD keys to control the car, ESC to exit map creator as well as the game, SPACE to save map and simply left click to replace a tile on the map.**
 
 ## Custom maps
 
