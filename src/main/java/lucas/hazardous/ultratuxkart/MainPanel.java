@@ -9,7 +9,6 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -165,13 +164,13 @@ public class MainPanel extends JPanel implements ActionListener {
                     player.getPlayerX() < (mapTargetPoint.get(1)+1)*TILE_SIZE &&
                     player.getPlayerY() > mapTargetPoint.get(0)*TILE_SIZE &&
                     player.getPlayerY() < (mapTargetPoint.get(0)+1)*TILE_SIZE) {
-                endGame(g, this.getClass().getClassLoader().getResourceAsStream("factory.jpg"), "Noxious conditions evaded.");
+                endGame(g, this.getClass().getClassLoader().getResourceAsStream("factory.jpg"), "\uD83D\uDE03\uD83D\uDC4D");
                 timer.stop();
             }
 
             if(isBotEnabled && bot1.isTaskCompleted()) isGameRunning = false;
         } else {
-            endGame(g, this.getClass().getClassLoader().getResourceAsStream("vulcan.jpg"), "Ethereal operator ceased existence.");
+            endGame(g, this.getClass().getClassLoader().getResourceAsStream("vulcan.jpg"), "\uD83D\uDE1E\uD83D\uDC4E");
             timer.stop();
         }
     }
@@ -183,7 +182,7 @@ public class MainPanel extends JPanel implements ActionListener {
             g.drawImage(endPicture, 0, 0, null);
 
             g.setFont(new Font("Monospaced", Font.BOLD, TILE_SIZE/5));
-            g.setColor(new Color(55, 255, 0));
+            g.setColor(Color.white);
             FontMetrics metrics = getFontMetrics(g.getFont());
             g.drawString(text, (GAME_WIDTH - metrics.stringWidth(text))/2, GAME_HEIGHT/2);
             image.close();

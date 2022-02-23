@@ -6,6 +6,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
+import java.util.Scanner;
 
 public class MainMenu extends JPanel {
 
@@ -21,35 +22,44 @@ public class MainMenu extends JPanel {
         this.setPreferredSize(new Dimension(MENU_WIDTH, MENU_HEIGHT));
         this.setFocusable(true);
 
+        String[] texts = new String[6];
+        //load texts for buttons
+        Scanner textsScanner = new Scanner(this.getClass().getClassLoader().getResourceAsStream("english.language"));
+        byte i = 0;
+        while (textsScanner.hasNext() && i < 7) {
+            texts[i] = textsScanner.nextLine();
+            i++;
+        }
+
         //button for starting the game
-        JButton btnSwitch = new JButton("Play");
+        JButton btnSwitch = new JButton(texts[0]);
         btnSwitch.addActionListener(e -> parentFrame.changePanelToGame());
         this.add(btnSwitch);
 
         //button for creating maps
-        JButton btnCreator = new JButton("Create");
+        JButton btnCreator = new JButton(texts[1]);
         btnCreator.addActionListener(e -> parentFrame.changePanelToMapCreator());
         this.add(btnCreator);
 
         //loading custom map
-        JButton btnMap = new JButton("Load map");
+        JButton btnMap = new JButton(texts[2]);
         btnMap.addActionListener(e -> {
             JFileChooser chooser = new JFileChooser();
-            FileNameExtensionFilter extensionFilter = new FileNameExtensionFilter("Map files", "map");
+            FileNameExtensionFilter extensionFilter = new FileNameExtensionFilter(texts[3], "map");
             chooser.setFileFilter(extensionFilter);
             int chooserResponse = chooser.showOpenDialog(null);
             if(chooserResponse == JFileChooser.APPROVE_OPTION) parentFrame.setMap(new File(chooser.getSelectedFile().getAbsolutePath()));
         });
         this.add(btnMap);
 
-        JButton btnEnableBot = new JButton("Disable bot");
+        JButton btnEnableBot = new JButton(texts[4]);
         btnEnableBot.addActionListener(e -> {
             isBotEnabled = !isBotEnabled;
             if(isBotEnabled) {
-                btnEnableBot.setText("Disable bot");
+                btnEnableBot.setText(texts[4]);
                 parentFrame.setBotEnabled(true);
             } else {
-                btnEnableBot.setText("Enable bot");
+                btnEnableBot.setText(texts[5]);
                 parentFrame.setBotEnabled(false);
             }
         });
