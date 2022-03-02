@@ -27,3 +27,7 @@ jar {
         )
     }
 }
+
+compileJava {
+    options.compilerArgs << "-Xlint:unchecked"
+}

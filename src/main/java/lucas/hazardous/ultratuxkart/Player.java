@@ -34,6 +34,9 @@ public class Player {
     private int speedTime = 0;
     private static final int TIME_TO_REACH_MAX_SPEED = 7;
 
+    //remaining boosts for increasing speed time
+    public int playerBoosts = 3;
+
     //player's image
     public static BufferedImage PLAYER_IMG;
     {
@@ -89,11 +92,24 @@ public class Player {
         return angleRadians;
     }
 
+    public int getPlayerBoosts() {
+        return playerBoosts;
+    }
+
+    //consume one boost
+    public void useBoost() {
+        if(playerBoosts > 0) {
+            playerBoosts--;
+            speedTime += 3;
+        }
+    }
+
     private void movePlayerWithDirection() {
         //save current velocity for later to draw vector
         lastPlayerX = playerX;
         lastPlayerY = playerY;
 
+        //move player
         playerX += (int) ((Math.cos(angleRadians) * (Math.pow(speedTime, 2) * MAX_PLAYER_SPEED/2)) - Math.sin(angleRadians)*(Math.pow(speedTime, 1.3) * MAX_PLAYER_SPEED/2));
         playerY += (int) ((Math.sin(angleRadians) * (Math.pow(speedTime, 2) * MAX_PLAYER_SPEED/2)) + Math.cos(angleRadians)*(Math.pow(speedTime, 1.3) * MAX_PLAYER_SPEED/2));
 
@@ -121,13 +137,14 @@ public class Player {
             movePlayerWithDirection();
 
             //increase time required to reach maximum speed
-            if (speedTime < TIME_TO_REACH_MAX_SPEED) {
-                speedTime += 1;
-            }
+            if (speedTime < TIME_TO_REACH_MAX_SPEED) speedTime++;
+
+            //after exceeding maximum speed (used boost) slow player down
+            if(speedTime > TIME_TO_REACH_MAX_SPEED) speedTime--;
         } else {
             //slowly stop player
             if (speedTime > 0) {
-                speedTime -= 1;
+                speedTime--;
                 movePlayerWithDirection();
             }
         }
