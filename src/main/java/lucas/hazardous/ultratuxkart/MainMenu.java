@@ -17,10 +17,21 @@ public class MainMenu extends JPanel {
 
     private Image background;
 
+    private static final String[] skinChoices = new String[]{"Fire", "Ice"};
+
     public MainMenu(MainFrame parentFrame) {
-        this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
-        this.setPreferredSize(new Dimension(MENU_WIDTH, MENU_HEIGHT));
-        this.setFocusable(true);
+        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        setPreferredSize(new Dimension(MENU_WIDTH, MENU_HEIGHT));
+        setFocusable(true);
+
+        //place buttons roughly in the center
+        add(Box.createRigidArea(new Dimension(MENU_WIDTH/4, MENU_HEIGHT/4)));
+
+        //add combobox for choosing player's skin
+        JComboBox<String> comboBox = new JComboBox<>(skinChoices);
+        comboBox.setPrototypeDisplayValue("skin");
+        comboBox.setMaximumSize(comboBox.getPreferredSize());
+        add(comboBox);
 
         String[] texts = new String[6];
         //load texts for buttons
@@ -33,13 +44,13 @@ public class MainMenu extends JPanel {
 
         //button for starting the game
         JButton btnSwitch = new JButton(texts[0]);
-        btnSwitch.addActionListener(e -> parentFrame.changePanelToGame());
-        this.add(btnSwitch);
+        btnSwitch.addActionListener(e -> parentFrame.changePanelToGame((String) comboBox.getSelectedItem()));
+        add(btnSwitch);
 
         //button for creating maps
         JButton btnCreator = new JButton(texts[1]);
         btnCreator.addActionListener(e -> parentFrame.changePanelToMapCreator());
-        this.add(btnCreator);
+        add(btnCreator);
 
         //loading custom map
         JButton btnMap = new JButton(texts[2]);
@@ -50,7 +61,7 @@ public class MainMenu extends JPanel {
             int chooserResponse = chooser.showOpenDialog(null);
             if(chooserResponse == JFileChooser.APPROVE_OPTION) parentFrame.setMap(new File(chooser.getSelectedFile().getAbsolutePath()));
         });
-        this.add(btnMap);
+        add(btnMap);
 
         JButton btnEnableBot = new JButton(texts[4]);
         btnEnableBot.addActionListener(e -> {
@@ -63,7 +74,7 @@ public class MainMenu extends JPanel {
                 parentFrame.setBotEnabled(false);
             }
         });
-        this.add(btnEnableBot);
+        add(btnEnableBot);
 
         //loading main menu background image
         try {

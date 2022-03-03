@@ -42,10 +42,11 @@ public class MainFrame extends JFrame {
         }
     }
 
-    public void changePanelToGame() {
+    public void changePanelToGame(String chosenSkin) {
         this.getContentPane().removeAll();
         MainPanel.setIsBotEnabled(isBotEnabled);
         MainPanel game = new MainPanel(this);
+        game.setPlayerSkin(chosenSkin);
         this.add(game);
         this.setFocusable(true);
         this.revalidate();

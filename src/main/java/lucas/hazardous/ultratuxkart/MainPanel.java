@@ -94,6 +94,18 @@ public class MainPanel extends JPanel implements ActionListener {
 
     private MainFrame parentFrame;
 
+    public void setPlayerSkin(String chosenSkin) {
+        switch (chosenSkin) {
+            case "Ice":
+                try {
+                    Player.PLAYER_IMG = ImageIO.read(this.getClass().getClassLoader().getResourceAsStream("iceSkin.png"));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                break;
+        }
+    }
+
     MainPanel(MainFrame parentFrame) {
         this.parentFrame = parentFrame;
 

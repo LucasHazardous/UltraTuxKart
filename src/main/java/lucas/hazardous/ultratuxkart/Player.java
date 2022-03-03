@@ -41,7 +41,7 @@ public class Player {
     public static BufferedImage PLAYER_IMG;
     {
         try {
-            PLAYER_IMG = ImageIO.read(this.getClass().getClassLoader().getResourceAsStream("img.png"));
+            PLAYER_IMG = ImageIO.read(this.getClass().getClassLoader().getResourceAsStream("fireSkin.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
