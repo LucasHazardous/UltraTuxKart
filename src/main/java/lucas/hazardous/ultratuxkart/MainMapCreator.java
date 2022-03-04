@@ -11,6 +11,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class MainMapCreator extends JPanel {
     private MainFrame parentFrame;
@@ -95,8 +96,9 @@ public class MainMapCreator extends JPanel {
             if(e.getKeyCode() == KeyEvent.VK_ESCAPE) parentFrame.changePanelToMenu();
 
             else if(e.getKeyCode() == KeyEvent.VK_SPACE) {
-                File savedMap = new File("custom_map.map");
-
+                Random random = new Random();
+                File savedMap = new File(random.nextInt(99999999) + ".map");
+                while(savedMap.exists()) savedMap = new File(random.nextInt(99999999) + ".map");
                 try {
                     if(savedMap.createNewFile()) {
                         FileWriter fileWriter = new FileWriter("custom_map.map");
