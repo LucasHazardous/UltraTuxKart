@@ -24,6 +24,11 @@ public class MainMenu extends JPanel {
         setPreferredSize(new Dimension(MENU_WIDTH, MENU_HEIGHT));
         setFocusable(true);
 
+        //add author's nick
+        JLabel authorLabel = new JLabel("Lucas Hazardous");
+        authorLabel.setForeground(Color.RED);
+        add(authorLabel);
+
         //place buttons roughly in the center
         add(Box.createRigidArea(new Dimension(MENU_WIDTH/4, MENU_HEIGHT/4)));
 
