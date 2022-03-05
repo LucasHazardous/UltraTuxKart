@@ -11,6 +11,9 @@ public class MainFrame extends JFrame {
     private MainMenu menu = new MainMenu(this);
     private byte[][] map = new byte[5][5];
     private boolean isBotEnabled = true;
+    public static final int PANEL_WIDTH = 500;
+    public static final int PANEL_HEIGHT = 500;
+    private GameSettingsMenuPanel gameSettingsMenuPanel = new GameSettingsMenuPanel(this);
 
     public void setBotEnabled(boolean botEnabled) {
         isBotEnabled = botEnabled;
@@ -69,6 +72,15 @@ public class MainFrame extends JFrame {
         this.revalidate();
         this.repaint();
         tmpCreator.requestFocus(false);
+    }
+
+    public void changePanelToGameSettings() {
+        this.getContentPane().removeAll();
+        this.add(gameSettingsMenuPanel);
+        this.setFocusable(true);
+        this.revalidate();
+        this.repaint();
+        gameSettingsMenuPanel.requestFocus();
     }
 
     MainFrame() {

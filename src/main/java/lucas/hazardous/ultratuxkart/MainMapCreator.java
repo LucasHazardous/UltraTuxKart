@@ -97,11 +97,15 @@ public class MainMapCreator extends JPanel {
 
             else if(e.getKeyCode() == KeyEvent.VK_SPACE) {
                 Random random = new Random();
-                File savedMap = new File(random.nextInt(99999999) + ".map");
-                while(savedMap.exists()) savedMap = new File(random.nextInt(99999999) + ".map");
+                String fileName = random.nextInt(99999999) + ".map";
+                File savedMap = new File(fileName);
+                while(savedMap.exists()) {
+                    fileName = random.nextInt(99999999) + ".map";
+                    savedMap = new File(fileName);
+                }
                 try {
                     if(savedMap.createNewFile()) {
-                        FileWriter fileWriter = new FileWriter("custom_map.map");
+                        FileWriter fileWriter = new FileWriter(fileName);
 
                         String result = "";
                         for (int row = 0; row < map.length; row++) {

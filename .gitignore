@@ -3,3 +3,4 @@ ultratuxkart.iml
 out/
 .gradle
 build/
+*.map
