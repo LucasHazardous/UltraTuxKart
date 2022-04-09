@@ -17,7 +17,7 @@ import java.util.List;
 //Photo by Carlos from Pexels - vulcan.jpg
 //Photo by Kateryna Babaieva from Pexels - factory.jpg
 
-public class MainPanel extends JPanel implements ActionListener {
+public class GamePanel extends JPanel implements ActionListener {
     //sizes of components
     private static final int GAME_WIDTH = 500;
     private static final int GAME_HEIGHT = 500;
@@ -27,7 +27,7 @@ public class MainPanel extends JPanel implements ActionListener {
     private static boolean isBotEnabled;
 
     public static void setIsBotEnabled(boolean isBotEnabled) {
-        MainPanel.isBotEnabled = isBotEnabled;
+        GamePanel.isBotEnabled = isBotEnabled;
     }
 
     //game map
@@ -40,24 +40,26 @@ public class MainPanel extends JPanel implements ActionListener {
     };
 
     public static void setMap(byte[][] map) {
-        MainPanel.map = map;
+        GamePanel.map = map;
     }
 
     private final List<Integer> mapStartingPoint = new ArrayList<>();
     private static List<Integer> mapTargetPoint = new ArrayList<>();
 
     public static void setMapTargetPoint(List<Integer> mapTargetPoint) {
-        MainPanel.mapTargetPoint = mapTargetPoint;
+        GamePanel.mapTargetPoint = mapTargetPoint;
     }
 
     //path from mapStartingPoint to mapTargetPoint
     private List<List<Integer>> path;
 
-    private GameBot bot1;
+    private EnemyBot bot1;
 
     //variables for pathfinding
     private int bestResultLength = map.length*map[0].length;
     private List<List<List<Integer>>> results = new ArrayList<>();
+
+    private MapEngine mapEngine = new MapEngine(map, TILE_SIZE);
 
     static {
         mapTargetPoint.add(0);
@@ -79,7 +81,7 @@ public class MainPanel extends JPanel implements ActionListener {
 
         if(isBotEnabled) {
             //initialize new game bot
-            bot1 = new GameBot(path, TILE_SIZE);
+            bot1 = new EnemyBot(path, TILE_SIZE);
             bot1.start();
         }
     }
@@ -106,7 +108,7 @@ public class MainPanel extends JPanel implements ActionListener {
         }
     }
 
-    MainPanel(MainFrame parentFrame) {
+    GamePanel(MainFrame parentFrame) {
         this.parentFrame = parentFrame;
 
         this.setPreferredSize(new Dimension(GAME_WIDTH, GAME_HEIGHT));
@@ -128,16 +130,7 @@ public class MainPanel extends JPanel implements ActionListener {
     private void drawEverything(Graphics g) {
         if (isGameRunning) {
             //draw map
-            for (int row = 0; row < map.length; row++) {
-                for (int tile = 0; tile < map[row].length; tile++) {
-                    if (map[row][tile] == 1) {
-                        g.setColor(Color.gray);
-                    } else if(map[row][tile] == 0) {
-                        g.setColor(Color.green);
-                    }
-                    g.fillRect(tile * TILE_SIZE, row * TILE_SIZE, TILE_SIZE, TILE_SIZE);
-                }
-            }
+            mapEngine.drawMap(g);
 
             //check if player is alive
             if(map[player.getPlayerY()/TILE_SIZE][player.getPlayerX()/TILE_SIZE] == 0) {
@@ -157,7 +150,7 @@ public class MainPanel extends JPanel implements ActionListener {
             g.fillRect(mapTargetPoint.get(1)*TILE_SIZE, mapTargetPoint.get(0)*TILE_SIZE, TILE_SIZE, TILE_SIZE);
 
             //rotating player's image
-            AffineTransform transform = AffineTransform.getRotateInstance(player.getAngleRadians(), Player.PLAYER_IMG.getWidth()/2, Player.PLAYER_IMG.getHeight()/2);
+            AffineTransform transform = AffineTransform.getRotateInstance(player.getSpeedVectorAngleRadians(), Player.PLAYER_IMG.getWidth()/2, Player.PLAYER_IMG.getHeight()/2);
             AffineTransformOp op = new AffineTransformOp(transform, AffineTransformOp.TYPE_BILINEAR);
 
             //draw player
@@ -173,7 +166,7 @@ public class MainPanel extends JPanel implements ActionListener {
 
             //draw bot
             if(isBotEnabled)
-            g.fillRect(bot1.getBotX(), bot1.getBotY(), GameBot.BOT_SIZE, GameBot.BOT_SIZE);
+            g.fillRect(bot1.getBotX(), bot1.getBotY(), EnemyBot.BOT_SIZE, EnemyBot.BOT_SIZE);
 
             //check if player reached the target
             if(player.getPlayerX() > mapTargetPoint.get(1)*TILE_SIZE &&
@@ -184,7 +177,7 @@ public class MainPanel extends JPanel implements ActionListener {
                 timer.stop();
             }
 
-            if(isBotEnabled && bot1.isTaskCompleted()) isGameRunning = false;
+            if(isBotEnabled && bot1.isEndPointReached()) isGameRunning = false;
         } else {
             endGame(g, this.getClass().getClassLoader().getResourceAsStream("vulcan.jpg"), "\uD83D\uDE1E\uD83D\uDC4E");
             timer.stop();
@@ -269,10 +262,10 @@ public class MainPanel extends JPanel implements ActionListener {
                     player.setIsDriving(true);
                     break;
                 case KeyEvent.VK_D:
-                    player.setGoingRight(true);
+                    player.setMovingRight(true);
                     break;
                 case KeyEvent.VK_A:
-                    player.setGoingLeft(true);
+                    player.setMovingLeft(true);
                     break;
                 case KeyEvent.VK_ESCAPE:
                     parentFrame.changePanelToMenu();
@@ -290,10 +283,10 @@ public class MainPanel extends JPanel implements ActionListener {
                     player.setIsDriving(false);
                     break;
                 case KeyEvent.VK_D:
-                    player.setGoingRight(false);
+                    player.setMovingRight(false);
                     break;
                 case KeyEvent.VK_A:
-                    player.setGoingLeft(false);
+                    player.setMovingLeft(false);
                     break;
             }
         }

@@ -13,10 +13,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class MainMapCreator extends JPanel {
+public class MapCreatorPanel extends JPanel {
     private MainFrame parentFrame;
+
     private static List<Integer> mapTargetPoint = new ArrayList<>();
-    private static final int TILE_SIZE = MainPanel.TILE_SIZE;
+
+    private static final int TILE_SIZE = GamePanel.TILE_SIZE;
 
     private static byte[][] map = new byte[][]{
             {0, 0, 0, 0, 2},
@@ -25,6 +27,14 @@ public class MainMapCreator extends JPanel {
             {0, 0, 0, 0, 0},
             {0, 0, 0, 0, 0}
     };
+    private MapEngine mapEngine = new MapEngine(map, TILE_SIZE);
+
+    MapCreatorPanel(MainFrame parentFrame) {
+        this.parentFrame = parentFrame;
+        this.setFocusable(true);
+        this.addMouseListener(new PanelMouseListener());
+        this.addKeyListener(new PanelKeyListener());
+    }
 
     static {
         mapTargetPoint.add(0);
@@ -39,30 +49,16 @@ public class MainMapCreator extends JPanel {
         mapTargetPoint = newTargetPoint;
     }
 
-    MainMapCreator(MainFrame parentFrame) {
-        this.parentFrame = parentFrame;
-        this.setFocusable(true);
-        this.addMouseListener(new PanelMouseListener());
-        this.addKeyListener(new PanelKeyListener());
-    }
-
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
 
-        //draw map
-        for (int row = 0; row < map.length; row++) {
-            for (int tile = 0; tile < map[row].length; tile++) {
-                if (map[row][tile] == 1) {
-                    g.setColor(Color.gray);
-                } else if(map[row][tile] == 0) {
-                    g.setColor(Color.green);
-                }
-                g.fillRect(tile * TILE_SIZE, row * TILE_SIZE, TILE_SIZE, TILE_SIZE);
-            }
-        }
+        mapEngine.drawMap(g);
 
-        //draw target point
+        drawTargetPoint(g);
+    }
+
+    private void drawTargetPoint(Graphics g) {
         g.setColor(Color.orange);
         g.fillRect(mapTargetPoint.get(1)*TILE_SIZE, mapTargetPoint.get(0)*TILE_SIZE, TILE_SIZE, TILE_SIZE);
     }
@@ -73,7 +69,10 @@ public class MainMapCreator extends JPanel {
         public void mouseClicked(MouseEvent e) {
             int tmpX = e.getX()/TILE_SIZE;
             int tmpY = e.getY()/TILE_SIZE;
-            if(map[tmpY][tmpX] != 2) map[tmpY][tmpX] = (byte) (map[tmpY][tmpX] == 0 ? 1 : 0);
+
+            if(map[tmpY][tmpX] != 2)
+                map[tmpY][tmpX] = (byte) (map[tmpY][tmpX] == 0 ? 1 : 0);
+
             repaint();
         }
 
@@ -96,32 +95,45 @@ public class MainMapCreator extends JPanel {
             if(e.getKeyCode() == KeyEvent.VK_ESCAPE) parentFrame.changePanelToMenu();
 
             else if(e.getKeyCode() == KeyEvent.VK_SPACE) {
-                Random random = new Random();
-                String fileName = random.nextInt(99999999) + ".map";
-                File savedMap = new File(fileName);
-                while(savedMap.exists()) {
-                    fileName = random.nextInt(99999999) + ".map";
-                    savedMap = new File(fileName);
-                }
                 try {
-                    if(savedMap.createNewFile()) {
-                        FileWriter fileWriter = new FileWriter(fileName);
-
-                        String result = "";
-                        for (int row = 0; row < map.length; row++) {
-                            for (int tile = 0; tile < map[row].length; tile++) {
-                                result += map[row][tile];
-                            }
-                            result += "\n";
-                        }
-
-                        fileWriter.write(result);
-                        fileWriter.close();
-                    }
+                    saveMapToFile();
                 } catch (IOException ex) {
                     JOptionPane.showMessageDialog(parentFrame, ex);
                 }
             }
         }
+    }
+
+    private void saveMapToFile() throws IOException{
+        String filename = generateRandomFilename();
+        File mapFile = new File(filename);
+
+        if(mapFile.createNewFile()) {
+            FileWriter fileWriter = new FileWriter(filename);
+
+            String result = "";
+            for (int row = 0; row < map.length; row++) {
+                for (int tile = 0; tile < map[row].length; tile++) {
+                    result += map[row][tile];
+                }
+                result += "\n";
+            }
+
+            fileWriter.write(result);
+            fileWriter.close();
+        }
+    }
+
+    private String generateRandomFilename() {
+        Random random = new Random();
+        String filename = random.nextInt(99999999) + ".map";
+        File file = new File(filename);
+
+        while(file.exists()) {
+            filename = random.nextInt(99999999) + ".map";
+            file = new File(filename);
+        }
+
+        return filename;
     }
 }

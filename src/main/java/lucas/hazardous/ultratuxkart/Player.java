@@ -21,55 +21,41 @@ public class Player {
 
     public static final int PLAYER_SIZE = 20;
 
-    //checks for player movement
-    private boolean isDriving = false;
-    private boolean goingRight = false;
-    private boolean goingLeft = false;
+    private boolean isMovingForward = false;
+    private boolean isMovingRight = false;
+    private boolean isMovingLeft = false;
 
-    //current player's position
     private int playerX;
     private int playerY;
 
-    //values used for calculating speed vector
     private int speedTime = 0;
     private static final int TIME_TO_REACH_MAX_SPEED = 7;
 
-    //remaining boosts for increasing speed time
     public int playerBoosts = 3;
+    private static final int BOOST_STRENGTH = 3;
 
-    //player's image
     public static BufferedImage PLAYER_IMG;
-    {
-        try {
-            PLAYER_IMG = ImageIO.read(this.getClass().getClassLoader().getResourceAsStream("fireSkin.png"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
-    //coordinates for drawing vector
     private int lastPlayerX = playerX;
     private int lastPlayerY = playerY;
+
     private int lineX;
     private int lineY;
 
-    //speed vector rotation angle
-    private double angle = 270;
+    private double speedVectorAngle = 270;
 
-    //temporary storage for changing angle to radians
-    private double angleRadians = Math.toRadians(angle);
+    private double speedVectorAngleRadians = Math.toRadians(speedVectorAngle);
 
-    //methods for accessing variables from MainPanel
     public void setIsDriving(boolean isDriving) {
-        this.isDriving = isDriving;
+        this.isMovingForward = isDriving;
     }
 
-    public void setGoingRight(boolean goingRight) {
-        this.goingRight = goingRight;
+    public void setMovingRight(boolean movingRight) {
+        this.isMovingRight = movingRight;
     }
 
-    public void setGoingLeft(boolean goingLeft) {
-        this.goingLeft = goingLeft;
+    public void setMovingLeft(boolean movingLeft) {
+        this.isMovingLeft = movingLeft;
     }
 
     public int getPlayerX() {
@@ -88,68 +74,108 @@ public class Player {
         return lineY;
     }
 
-    public double getAngleRadians() {
-        return angleRadians;
+    public double getSpeedVectorAngleRadians() {
+        return speedVectorAngleRadians;
     }
 
     public int getPlayerBoosts() {
         return playerBoosts;
     }
 
-    //consume one boost
     public void useBoost() {
         if(playerBoosts > 0) {
             playerBoosts--;
-            speedTime += 3;
+            speedTime += BOOST_STRENGTH;
         }
     }
 
-    private void movePlayerWithDirection() {
-        //save current velocity for later to draw vector
+    {
+        try {
+            loadPlayerImage();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void loadPlayerImage() throws IOException {
+        PLAYER_IMG = ImageIO.read(this.getClass().getClassLoader().getResourceAsStream("fireSkin.png"));
+    }
+
+    private void calculateNewPlayerPosition() {
+        playerX += (int) ((Math.cos(speedVectorAngleRadians) * (Math.pow(speedTime, 2) * MAX_PLAYER_SPEED/2)) - Math.sin(speedVectorAngleRadians)*(Math.pow(speedTime, 1.3) * MAX_PLAYER_SPEED/2));
+        playerY += (int) ((Math.sin(speedVectorAngleRadians) * (Math.pow(speedTime, 2) * MAX_PLAYER_SPEED/2)) + Math.cos(speedVectorAngleRadians)*(Math.pow(speedTime, 1.3) * MAX_PLAYER_SPEED/2));
+    }
+
+    private void savePreviousPlayerPosition() {
         lastPlayerX = playerX;
         lastPlayerY = playerY;
+    }
 
-        //move player
-        playerX += (int) ((Math.cos(angleRadians) * (Math.pow(speedTime, 2) * MAX_PLAYER_SPEED/2)) - Math.sin(angleRadians)*(Math.pow(speedTime, 1.3) * MAX_PLAYER_SPEED/2));
-        playerY += (int) ((Math.sin(angleRadians) * (Math.pow(speedTime, 2) * MAX_PLAYER_SPEED/2)) + Math.cos(angleRadians)*(Math.pow(speedTime, 1.3) * MAX_PLAYER_SPEED/2));
-
-        //change values used for drawing vectors
+    private void calculateLinePosition() {
         lineX = playerX*2-lastPlayerX;
         lineY = playerY*2-lastPlayerY;
     }
 
     public void playerMove() {
-        if (isDriving) {
-            //change rotation of speed vector
-            if(goingRight) {
-                if(speedTime > 3) speedTime -= 1;
-                angle += 20;
-                if(angle >= 360) angle=0;
-                angleRadians = Math.toRadians(angle);
-            } else if(goingLeft) {
-                if(speedTime > 3) speedTime -= 1;
-                angle -= 20;
-                if(angle <= 0) angle=360;
-                angleRadians = Math.toRadians(angle);
-            }
+        if (isMovingForward) {
+            if(isMovingRight)
+                rotateRight();
+            else if(isMovingLeft)
+                rotateLeft();
 
-            //change speed
-            movePlayerWithDirection();
+            changeSpeedTime();
 
-            //increase time required to reach maximum speed
-            if (speedTime < TIME_TO_REACH_MAX_SPEED) speedTime++;
-
-            //after exceeding maximum speed (used boost) slow player down
-            if(speedTime > TIME_TO_REACH_MAX_SPEED) speedTime--;
+            if(isMovingLeft || isMovingLeft)
+                decreaseSpeedTimeWhenRotating();
         } else {
-            //slowly stop player
-            if (speedTime > 0) {
-                speedTime--;
-                movePlayerWithDirection();
-            }
+            decreaseSpeedIfNotMoving();
         }
 
-        //checks to prevent player from going out of the window
+        savePreviousPlayerPosition();
+
+        calculateNewPlayerPosition();
+
+        calculateLinePosition();
+
+        movePlayerBackIfOutOfWindow();
+    }
+
+    private void changeSpeedTime() {
+        if (speedTime < TIME_TO_REACH_MAX_SPEED)
+            speedTime++;
+        else if(speedTime > TIME_TO_REACH_MAX_SPEED)
+            speedTime--;
+    }
+
+    private void decreaseSpeedIfNotMoving() {
+        if (speedTime > 0)
+            speedTime--;
+    }
+
+    private void decreaseSpeedTimeWhenRotating() {
+        if(speedTime > 3)
+            speedTime -= 1;
+    }
+
+    private void rotateLeft() {
+        speedVectorAngle -= 20;
+
+        if(speedVectorAngle <= 0)
+            speedVectorAngle = 360;
+
+        speedVectorAngleRadians = Math.toRadians(speedVectorAngle);
+    }
+
+    private void rotateRight() {
+        speedVectorAngle += 20;
+
+        if(speedVectorAngle >= 360)
+            speedVectorAngle = 0;
+
+        speedVectorAngleRadians = Math.toRadians(speedVectorAngle);
+    }
+
+    private void movePlayerBackIfOutOfWindow() {
         if (playerX <= 0) {
             playerX = 1;
         }

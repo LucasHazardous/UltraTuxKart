@@ -8,30 +8,43 @@ import java.io.IOException;
 public class MainMenu extends JPanel {
     private Image background;
 
+    private MainFrame parentFrame;
+
     public MainMenu(MainFrame parentFrame) {
+        this.parentFrame = parentFrame;
+
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         setPreferredSize(new Dimension(MainFrame.PANEL_WIDTH, MainFrame.PANEL_HEIGHT));
         setFocusable(true);
 
-        //add author's nick
-        JLabel authorLabel = new JLabel("Lucas Hazardous");
-        authorLabel.setForeground(Color.RED);
-        add(authorLabel);
+        addAuthorLabel();
 
-        //place buttons roughly in the center
         add(Box.createRigidArea(new Dimension(MainFrame.PANEL_WIDTH/4, MainFrame.PANEL_HEIGHT/4)));
 
-        JButton gameSettings = new JButton("Play");
-        gameSettings.addActionListener(e -> parentFrame.changePanelToGameSettings());
-        add(gameSettings);
+        addPlayButton();
 
-        //loading main menu background image
         try {
-            //Photo by thiago japyassu from Pexels
-            background = ImageIO.read(this.getClass().getClassLoader().getResourceAsStream("background.jpg"));
+            loadBackgroundImage();
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private void addAuthorLabel() {
+        JLabel authorLabel = new JLabel("Lucas Hazardous");
+        authorLabel.setForeground(Color.RED);
+        add(authorLabel);
+    }
+
+    private void addPlayButton() {
+        JButton playButton = new JButton("Play");
+        playButton.addActionListener(e -> parentFrame.changePanelToGameSettings());
+        add(playButton);
+    }
+
+    private void loadBackgroundImage() throws IOException {
+        //Photo by thiago japyassu from Pexels
+        background = ImageIO.read(this.getClass().getClassLoader().getResourceAsStream("background.jpg"));
     }
 
     @Override
