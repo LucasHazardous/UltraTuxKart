@@ -1,14 +1,20 @@
 package lucas.hazardous.ultratuxkart;
 
+import lucas.hazardous.ultratuxkart.panel.GamePanel;
+import lucas.hazardous.ultratuxkart.panel.GameSettingsMenuPanel;
+import lucas.hazardous.ultratuxkart.panel.MainMenuPanel;
+import lucas.hazardous.ultratuxkart.panel.MapCreatorPanel;
+
 import javax.swing.*;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 public class MainFrame extends JFrame {
-    private MainMenu menu = new MainMenu(this);
+    private MainMenuPanel menu = new MainMenuPanel(this);
 
     private byte[][] map = new byte[5][5];
     private List<Integer> mapTargetPoint;
@@ -20,7 +26,7 @@ public class MainFrame extends JFrame {
 
     private GameSettingsMenuPanel gameSettingsMenuPanel = new GameSettingsMenuPanel(this);
 
-    MainFrame() {
+    public MainFrame() {
         this.add(menu);
         this.setTitle("UltraTuxKart");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -75,7 +81,11 @@ public class MainFrame extends JFrame {
 
         GamePanel.setIsBotEnabled(isBotEnabled);
         GamePanel game = new GamePanel(this);
-        game.setPlayerSkin(chosenSkin);
+        try {
+            game.setPlayerSkin(chosenSkin);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         add(game);
 
         refocusRevalidateRepaint();

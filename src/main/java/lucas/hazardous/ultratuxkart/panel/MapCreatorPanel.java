@@ -1,4 +1,7 @@
-package lucas.hazardous.ultratuxkart;
+package lucas.hazardous.ultratuxkart.panel;
+
+import lucas.hazardous.ultratuxkart.MainFrame;
+import lucas.hazardous.ultratuxkart.tool.MapEngine;
 
 import javax.swing.*;
 import java.awt.*;
@@ -29,7 +32,7 @@ public class MapCreatorPanel extends JPanel {
     };
     private MapEngine mapEngine = new MapEngine(map, TILE_SIZE);
 
-    MapCreatorPanel(MainFrame parentFrame) {
+    public MapCreatorPanel(MainFrame parentFrame) {
         this.parentFrame = parentFrame;
         this.setFocusable(true);
         this.addMouseListener(new PanelMouseListener());

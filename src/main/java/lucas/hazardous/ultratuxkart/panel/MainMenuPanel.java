@@ -1,16 +1,18 @@
-package lucas.hazardous.ultratuxkart;
+package lucas.hazardous.ultratuxkart.panel;
+
+import lucas.hazardous.ultratuxkart.MainFrame;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
 
-public class MainMenu extends JPanel {
+public class MainMenuPanel extends JPanel {
     private Image background;
 
     private MainFrame parentFrame;
 
-    public MainMenu(MainFrame parentFrame) {
+    public MainMenuPanel(MainFrame parentFrame) {
         this.parentFrame = parentFrame;
 
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));

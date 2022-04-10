@@ -1,4 +1,4 @@
-package lucas.hazardous.ultratuxkart;
+package lucas.hazardous.ultratuxkart.entity;
 
 import java.util.List;
 
@@ -19,7 +19,10 @@ public class EnemyBot extends Thread{
         this.path = path;
         this.TILE_SIZE = TILE_SIZE;
 
-        calculateBotStartingPosition();
+        if(path.isEmpty())
+            isEndPointReached = true;
+        else
+            loadBotStartingPosition();
     }
 
     public int getBotX() {
@@ -34,13 +37,20 @@ public class EnemyBot extends Thread{
         return isEndPointReached;
     }
 
-    private void calculateBotStartingPosition() {
+    private void loadBotStartingPosition() {
         botX = path.get(0).get(1) * TILE_SIZE+TILE_SIZE/2-BOT_SIZE/2;
         botY = path.get(0).get(0) * TILE_SIZE+TILE_SIZE/2-BOT_SIZE/2;
     }
 
     @Override
     public void run() {
+        if(!isEndPointReached) {
+            followPathToTheEnd();
+            isEndPointReached = true;
+        }
+    }
+
+    private void followPathToTheEnd() {
         int targetX;
         int targetY;
 
@@ -49,8 +59,8 @@ public class EnemyBot extends Thread{
             targetY = path.get(i).get(0) * TILE_SIZE+TILE_SIZE/2-BOT_SIZE/2;
 
             while (
-                botX != targetX ||
-                botY != targetY
+                    botX != targetX ||
+                            botY != targetY
             ) {
                 try {
                     Thread.sleep(MOVE_DELAY);
@@ -63,8 +73,6 @@ public class EnemyBot extends Thread{
                 changePositionY(targetY);
             }
         }
-
-        isEndPointReached = true;
     }
 
     private void changePositionX(int targetX) {

@@ -1,4 +1,6 @@
-package lucas.hazardous.ultratuxkart;
+package lucas.hazardous.ultratuxkart.panel;
+
+import lucas.hazardous.ultratuxkart.MainFrame;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;

@@ -1,21 +1,10 @@
-package lucas.hazardous.ultratuxkart;
+package lucas.hazardous.ultratuxkart.entity;
 
-import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 
 public class Player {
     private final int GAME_WIDTH;
     private final int GAME_HEIGHT;
-
-    public Player(int GAME_WIDTH, int GAME_HEIGHT, int playerX, int playerY) {
-        this.GAME_HEIGHT = GAME_HEIGHT;
-        this.GAME_WIDTH = GAME_WIDTH;
-        this.playerX = playerX;
-        this.playerY = playerY;
-        this.lineX = this.playerX;
-        this.lineY = this.playerY;
-    }
 
     public static final double MAX_PLAYER_SPEED = 0.8;
 
@@ -45,6 +34,17 @@ public class Player {
     private double speedVectorAngle = 270;
 
     private double speedVectorAngleRadians = Math.toRadians(speedVectorAngle);
+
+    public Player(int GAME_WIDTH, int GAME_HEIGHT, int playerX, int playerY) {
+        this.GAME_HEIGHT = GAME_HEIGHT;
+        this.GAME_WIDTH = GAME_WIDTH;
+
+        this.playerX = playerX;
+        this.playerY = playerY;
+
+        this.lineX = this.playerX;
+        this.lineY = this.playerY;
+    }
 
     public void setIsDriving(boolean isDriving) {
         this.isMovingForward = isDriving;
@@ -87,18 +87,6 @@ public class Player {
             playerBoosts--;
             speedTime += BOOST_STRENGTH;
         }
-    }
-
-    {
-        try {
-            loadPlayerImage();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void loadPlayerImage() throws IOException {
-        PLAYER_IMG = ImageIO.read(this.getClass().getClassLoader().getResourceAsStream("fireSkin.png"));
     }
 
     private void calculateNewPlayerPosition() {
@@ -176,19 +164,16 @@ public class Player {
     }
 
     private void movePlayerBackIfOutOfWindow() {
-        if (playerX <= 0) {
+        if (playerX <= 0)
             playerX = 1;
-        }
-        if (playerY <= 0) {
+
+        if (playerY <= 0)
             playerY = 1;
-        }
 
-        if (playerX >= GAME_WIDTH - PLAYER_SIZE) {
-            playerX = GAME_WIDTH - PLAYER_SIZE-1;
-        }
+        if (playerX >= GAME_WIDTH - PLAYER_SIZE)
+            playerX = GAME_WIDTH - PLAYER_SIZE - 1;
 
-        if (playerY >= GAME_HEIGHT - PLAYER_SIZE) {
-            playerY = GAME_HEIGHT - PLAYER_SIZE-1;
-        }
+        if (playerY >= GAME_HEIGHT - PLAYER_SIZE)
+            playerY = GAME_HEIGHT - PLAYER_SIZE - 1;
     }
 }
