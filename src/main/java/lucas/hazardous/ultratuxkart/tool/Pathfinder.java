@@ -1,69 +1,54 @@
 package lucas.hazardous.ultratuxkart.tool;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
-public class Pathfinder {
-    private byte[][] map;
-
-    private int bestResultLength;
-    private List<List<List<Integer>>> results = new ArrayList<>();
-
-    public Pathfinder(byte[][] map) {
-        this.map = map;
-        this.bestResultLength = map.length*map[0].length;
-    }
+public record Pathfinder(byte[][] map) {
 
     public List<List<Integer>> findPathToTarget(List<Integer> mapTargetPoint, List<Integer> mapStartingPoint) {
-        findPathToTarget(mapTargetPoint, mapStartingPoint, new ArrayList<>());
-
-        return results.size() > 0 ? results.get(results.size() - 1) : new ArrayList<>();
+        var result = findPathToTarget(mapTargetPoint, mapStartingPoint, new ArrayList<>());
+        return result != null ? result : new ArrayList<>();
     }
 
-    private List<List<Integer>> findPathToTarget(List<Integer> targetPosition, List<Integer> currentPosition, List<List<Integer>> solution) {
-        //base case - found point is target point
-        if (currentPosition.equals(targetPosition)) {
-            solution.add(currentPosition);
-            return solution;
-        } else {
-            List<List<Integer>> result = new ArrayList<>(solution);
-            result.add(currentPosition);
+    private List<List<Integer>> findPathToTarget(List<Integer> targetPosition, List<Integer> currentPosition, List<List<Integer>> visited) {
+        if (!tilePartOfRoadAndNotVisited(currentPosition, visited)) return null;
 
-            //all locations that are possible to reach from current point
-            int[][] options = new int[][]{
-                    {currentPosition.get(0) + 1, currentPosition.get(1)},
-                    {currentPosition.get(0) - 1, currentPosition.get(1)},
-                    {currentPosition.get(0), currentPosition.get(1) - 1},
-                    {currentPosition.get(0), currentPosition.get(1) + 1}
-            };
+        if (currentPosition.equals(targetPosition)) return List.of(currentPosition);
 
-            //store temporary result from recursion
-            List<List<Integer>> tmpResult;
+        visited.add(currentPosition);
 
-            //placeholder for int[] from options
-            List<Integer> currentOptionButList;
+        List<List<Integer>> result = null;
+        int bestLength = -1;
 
-            //check every possible location
-            for (int[] option : options) {
-                currentOptionButList = new ArrayList<>();
-                currentOptionButList.add(option[0]);
-                currentOptionButList.add(option[1]);
+        List<List<Integer>> options = Arrays.asList(
+                Arrays.asList(currentPosition.get(0) + 1, currentPosition.get(1)),
+                Arrays.asList(currentPosition.get(0) - 1, currentPosition.get(1)),
+                Arrays.asList(currentPosition.get(0), currentPosition.get(1) + 1),
+                Arrays.asList(currentPosition.get(0), currentPosition.get(1) - 1)
+        );
 
-                //check if location exists, if it's a part of path and if it was not visited
-                if ((option[0] >= 0) && (option[0] < map.length) && (option[1] >= 0) && (option[1] < map[0].length)
-                        && map[option[0]][option[1]] != 0 && !result.contains(currentOptionButList)) {
+        List<List<Integer>> tmpResult;
 
-                    tmpResult = findPathToTarget(targetPosition, currentOptionButList, new ArrayList<>(result));
+        for (List<Integer> option : options) {
+            tmpResult = findPathToTarget(targetPosition, option, new ArrayList<>(visited));
 
-                    //check if found result is better
-                    if (tmpResult.size() < bestResultLength && tmpResult.size() > 1 && tmpResult.get(tmpResult.size()-1).equals(targetPosition)) {
-                        bestResultLength = tmpResult.size();
-                        result = new ArrayList<>(tmpResult);
-                        results.add(result);
-                    }
-                }
+            if (tmpResult == null) continue;
+            tmpResult = Stream.concat(Stream.of(currentPosition), tmpResult.stream()).collect(Collectors.toList());
+
+            if (bestLength == -1 || tmpResult.size() < bestLength) {
+                bestLength = tmpResult.size();
+                result = tmpResult;
             }
-            return result;
         }
+
+        return result;
+    }
+
+    private boolean tilePartOfRoadAndNotVisited(List<Integer> option, List<List<Integer>> visited) {
+        return (option.get(0) >= 0) && (option.get(0) < map.length) && (option.get(1) >= 0) && (option.get(1) < map[0].length)
+                && map[option.get(0)][option.get(1)] != 0 && !visited.contains(option);
     }
 }
