@@ -42,9 +42,7 @@ public class GamePanel extends JPanel implements ActionListener {
         GamePanel.map = map;
     }
 
-    private final List<Integer> mapStartingPoint = new ArrayList<>(Arrays.asList(new Integer[]{
-            map.length-1, 0
-    }));
+    private final List<Integer> mapStartingPoint = new ArrayList<>(Arrays.asList(map.length-1, 0));
 
     private static List<Integer> mapTargetPoint = new ArrayList<>();
 
@@ -52,10 +50,10 @@ public class GamePanel extends JPanel implements ActionListener {
 
     private EnemyBot enemyBot;
 
-    private MapEngine mapEngine = new MapEngine(map, TILE_SIZE);
+    private final MapEngine mapEngine = new MapEngine(map, TILE_SIZE);
 
     private static final int TIMER_DELAY = 100;
-    private Timer timer;
+    private final Timer timer;
 
     private boolean canPlayerMove = true;
 
@@ -63,12 +61,10 @@ public class GamePanel extends JPanel implements ActionListener {
             mapStartingPoint.get(1) * TILE_SIZE + TILE_SIZE / 2-Player.PLAYER_SIZE/2,
             mapStartingPoint.get(0) * TILE_SIZE + TILE_SIZE / 2-Player.PLAYER_SIZE/2);
 
-    private MainFrame parentFrame;
-
-    private Pathfinder pathfinder;
+    private final MainFrame parentFrame;
 
     public GamePanel(MainFrame parentFrame) {
-        pathfinder = new Pathfinder(map);
+        Pathfinder pathfinder = new Pathfinder(map);
 
         if(isBotEnabled) {
             enemyBotPath = pathfinder.findPathToTarget(mapTargetPoint, mapStartingPoint);
@@ -223,36 +219,20 @@ public class GamePanel extends JPanel implements ActionListener {
         @Override
         public void keyPressed(KeyEvent e) {
             switch (e.getKeyCode()) {
-                case KeyEvent.VK_W:
-                    player.setIsDriving(true);
-                    break;
-                case KeyEvent.VK_D:
-                    player.setMovingRight(true);
-                    break;
-                case KeyEvent.VK_A:
-                    player.setMovingLeft(true);
-                    break;
-                case KeyEvent.VK_ESCAPE:
-                    parentFrame.changePanelToMenu();
-                    break;
-                case KeyEvent.VK_SPACE:
-                    player.useBoost();
-                    break;
+                case KeyEvent.VK_W -> player.setIsDriving(true);
+                case KeyEvent.VK_D -> player.setMovingRight(true);
+                case KeyEvent.VK_A -> player.setMovingLeft(true);
+                case KeyEvent.VK_ESCAPE -> parentFrame.changePanelToMenu();
+                case KeyEvent.VK_SPACE -> player.useBoost();
             }
         }
 
         @Override
         public void keyReleased(KeyEvent e) {
             switch (e.getKeyCode()) {
-                case KeyEvent.VK_W:
-                    player.setIsDriving(false);
-                    break;
-                case KeyEvent.VK_D:
-                    player.setMovingRight(false);
-                    break;
-                case KeyEvent.VK_A:
-                    player.setMovingLeft(false);
-                    break;
+                case KeyEvent.VK_W -> player.setIsDriving(false);
+                case KeyEvent.VK_D -> player.setMovingRight(false);
+                case KeyEvent.VK_A -> player.setMovingLeft(false);
             }
         }
     }
