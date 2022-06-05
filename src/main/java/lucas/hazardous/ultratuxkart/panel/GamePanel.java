@@ -179,8 +179,7 @@ public class GamePanel extends JPanel implements ActionListener {
 
             //Photo by Kateryna Babaieva from Pexels
             showEndScreen(g, this.getClass().getClassLoader().getResourceAsStream("images/factory.jpg"), "\uD83D\uDE03\uD83D\uDC4D");
-            timer.stop();
-            canPlayerMove = false;
+            stopTimerPlayerAndSounds();
         }
     }
 
@@ -189,9 +188,14 @@ public class GamePanel extends JPanel implements ActionListener {
                 (map[player.getPlayerY()/TILE_SIZE][player.getPlayerX()/TILE_SIZE] == 0)) {
             //Photo by Carlos from Pexels
             showEndScreen(g, this.getClass().getClassLoader().getResourceAsStream("images/vulcan.jpg"), "\uD83D\uDE1E\uD83D\uDC4E");
-            timer.stop();
-            canPlayerMove = false;
+            stopTimerPlayerAndSounds();
         }
+    }
+
+    private void stopTimerPlayerAndSounds() {
+        timer.stop();
+        canPlayerMove = false;
+        player.stopAllPlayerSounds();
     }
 
     private void showEndScreen(Graphics g, InputStream image, String text) throws IOException {

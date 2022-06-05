@@ -15,6 +15,7 @@ public class PlayerSounds {
             engineClip = AudioSystem.getClip();
             engineClip.open(file);
             engineClip.loop(Clip.LOOP_CONTINUOUSLY);
+            engineClip.stop();
         } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
             throw new RuntimeException(e);
         }

@@ -188,4 +188,8 @@ public class Player {
         if (playerY >= GAME_HEIGHT - PLAYER_SIZE)
             playerY = GAME_HEIGHT - PLAYER_SIZE - 1;
     }
+
+    public void stopAllPlayerSounds() {
+        playerSounds.stopPlayingEngineSound();
+    }
 }
