@@ -10,7 +10,7 @@ import java.io.IOException;
 public class MainMenuPanel extends JPanel {
     private Image background;
 
-    private MainFrame parentFrame;
+    private final MainFrame parentFrame;
 
     public MainMenuPanel(MainFrame parentFrame) {
         this.parentFrame = parentFrame;

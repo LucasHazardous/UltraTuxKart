@@ -14,9 +14,9 @@ import java.util.List;
 import java.util.Scanner;
 
 public class MainFrame extends JFrame {
-    private MainMenuPanel menu = new MainMenuPanel(this);
+    private final MainMenuPanel menu = new MainMenuPanel(this);
 
-    private byte[][] map = new byte[5][5];
+    private final byte[][] map = new byte[5][5];
     private List<Integer> mapTargetPoint;
 
     private boolean isBotEnabled = true;
@@ -24,7 +24,7 @@ public class MainFrame extends JFrame {
     public static final int PANEL_WIDTH = 500;
     public static final int PANEL_HEIGHT = 500;
 
-    private GameSettingsMenuPanel gameSettingsMenuPanel = new GameSettingsMenuPanel(this);
+    private final GameSettingsMenuPanel gameSettingsMenuPanel = new GameSettingsMenuPanel(this);
 
     public MainFrame() {
         this.add(menu);

@@ -3,8 +3,8 @@ package lucas.hazardous.ultratuxkart.entity;
 import java.util.List;
 
 public class EnemyBot extends Thread{
-    private List<List<Integer>> path;
-    private int TILE_SIZE;
+    private final List<List<Integer>> path;
+    private final int TILE_SIZE;
 
     private int botX;
     private int botY;

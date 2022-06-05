@@ -16,7 +16,7 @@ public class GameSettingsMenuPanel extends JPanel {
     private static final String[] SKIN_OPTIONS = new String[]{"Fire", "Ice"};
     private boolean isBotEnabled = true;
     private Image background;
-    private MainFrame parentFrame;
+    private final MainFrame parentFrame;
     private String[] texts;
     private JComboBox<String> comboBoxPlayerSkin;
 
