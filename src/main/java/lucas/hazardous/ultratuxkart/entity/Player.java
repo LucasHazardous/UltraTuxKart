@@ -123,7 +123,7 @@ public class Player {
 
             changeSpeedTime();
 
-            if(isMovingLeft || isMovingLeft)
+            if(isMovingRight || isMovingLeft)
                 decreaseSpeedTimeWhenRotating();
         } else {
             isSoundPlaying = false;
