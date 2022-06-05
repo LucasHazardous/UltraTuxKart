@@ -100,9 +100,9 @@ public class GamePanel extends JPanel implements ActionListener {
     public void setPlayerSkin(String chosenSkin) throws IOException {
         switch (chosenSkin) {
             case "Ice" ->
-                    Player.PLAYER_IMG = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("iceSkin.png")));
+                    Player.PLAYER_IMG = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("images/iceSkin.png")));
             case "Fire" ->
-                    Player.PLAYER_IMG = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("fireSkin.png")));
+                    Player.PLAYER_IMG = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("images/fireSkin.png")));
         }
     }
 
@@ -178,7 +178,7 @@ public class GamePanel extends JPanel implements ActionListener {
                 player.getPlayerY() < (mapTargetPoint.get(0)+1)*TILE_SIZE) {
 
             //Photo by Kateryna Babaieva from Pexels
-            showEndScreen(g, this.getClass().getClassLoader().getResourceAsStream("factory.jpg"), "\uD83D\uDE03\uD83D\uDC4D");
+            showEndScreen(g, this.getClass().getClassLoader().getResourceAsStream("images/factory.jpg"), "\uD83D\uDE03\uD83D\uDC4D");
             timer.stop();
             canPlayerMove = false;
         }
@@ -188,7 +188,7 @@ public class GamePanel extends JPanel implements ActionListener {
         if((isBotEnabled && enemyBot.isEndPointReached()) ||
                 (map[player.getPlayerY()/TILE_SIZE][player.getPlayerX()/TILE_SIZE] == 0)) {
             //Photo by Carlos from Pexels
-            showEndScreen(g, this.getClass().getClassLoader().getResourceAsStream("vulcan.jpg"), "\uD83D\uDE1E\uD83D\uDC4E");
+            showEndScreen(g, this.getClass().getClassLoader().getResourceAsStream("images/vulcan.jpg"), "\uD83D\uDE1E\uD83D\uDC4E");
             timer.stop();
             canPlayerMove = false;
         }

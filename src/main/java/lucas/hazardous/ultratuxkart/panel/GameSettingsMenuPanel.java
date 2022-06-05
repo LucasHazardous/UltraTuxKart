@@ -121,6 +121,6 @@ public class GameSettingsMenuPanel extends JPanel {
 
     private void loadBackground() throws IOException {
         //Photo by Binyamin Mellish from Pexels
-        background = ImageIO.read(this.getClass().getClassLoader().getResourceAsStream("settings.jpg"));
+        background = ImageIO.read(this.getClass().getClassLoader().getResourceAsStream("images/settings.jpg"));
     }
 }

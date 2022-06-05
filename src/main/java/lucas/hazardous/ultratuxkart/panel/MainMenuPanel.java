@@ -46,7 +46,7 @@ public class MainMenuPanel extends JPanel {
 
     private void loadBackgroundImage() throws IOException {
         //Photo by thiago japyassu from Pexels
-        background = ImageIO.read(this.getClass().getClassLoader().getResourceAsStream("background.jpg"));
+        background = ImageIO.read(this.getClass().getClassLoader().getResourceAsStream("images/background.jpg"));
     }
 
     @Override
