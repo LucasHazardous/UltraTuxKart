@@ -99,12 +99,10 @@ public class GamePanel extends JPanel implements ActionListener {
 
     public void setPlayerSkin(String chosenSkin) throws IOException {
         switch (chosenSkin) {
-            case "Ice":
-                Player.PLAYER_IMG = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("iceSkin.png")));
-                break;
-            case "Fire":
-                Player.PLAYER_IMG = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("fireSkin.png")));
-                break;
+            case "Ice" ->
+                    Player.PLAYER_IMG = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("iceSkin.png")));
+            case "Fire" ->
+                    Player.PLAYER_IMG = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("fireSkin.png")));
         }
     }
 
