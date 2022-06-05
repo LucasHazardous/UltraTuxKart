@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Random;
 
 public class MapCreatorPanel extends JPanel {
-    private MainFrame parentFrame;
+    private final MainFrame parentFrame;
 
     private static List<Integer> mapTargetPoint = new ArrayList<>();
 
@@ -30,7 +30,7 @@ public class MapCreatorPanel extends JPanel {
             {0, 0, 0, 0, 0},
             {0, 0, 0, 0, 0}
     };
-    private MapEngine mapEngine = new MapEngine(map, TILE_SIZE);
+    private final MapEngine mapEngine = new MapEngine(map, TILE_SIZE);
 
     public MapCreatorPanel(MainFrame parentFrame) {
         this.parentFrame = parentFrame;
@@ -114,15 +114,15 @@ public class MapCreatorPanel extends JPanel {
         if(mapFile.createNewFile()) {
             FileWriter fileWriter = new FileWriter(filename);
 
-            String result = "";
-            for (int row = 0; row < map.length; row++) {
-                for (int tile = 0; tile < map[row].length; tile++) {
-                    result += map[row][tile];
+            StringBuilder result = new StringBuilder();
+            for (byte[] bytes : map) {
+                for (byte aByte : bytes) {
+                    result.append(aByte);
                 }
-                result += "\n";
+                result.append("\n");
             }
 
-            fileWriter.write(result);
+            fileWriter.write(result.toString());
             fileWriter.close();
         }
     }
