@@ -1,5 +1,7 @@
 package lucas.hazardous.ultratuxkart.entity;
 
+import lucas.hazardous.ultratuxkart.sounds.PlayerSounds;
+
 import java.awt.image.BufferedImage;
 
 public class Player {
@@ -34,6 +36,9 @@ public class Player {
     private double speedVectorAngle = 270;
 
     private double speedVectorAngleRadians = Math.toRadians(speedVectorAngle);
+
+    private final PlayerSounds playerSounds = new PlayerSounds();
+    private boolean isSoundPlaying = true;
 
     public Player(int GAME_WIDTH, int GAME_HEIGHT, int playerX, int playerY) {
         this.GAME_HEIGHT = GAME_HEIGHT;
@@ -106,6 +111,11 @@ public class Player {
 
     public void playerMove() {
         if (isMovingForward) {
+            if(!isSoundPlaying || !playerSounds.isEngineSoundRunning()){
+                isSoundPlaying = true;
+                playerSounds.resumeEngineSound();
+            }
+
             if(isMovingRight)
                 rotateRight();
             else if(isMovingLeft)
@@ -116,6 +126,8 @@ public class Player {
             if(isMovingLeft || isMovingLeft)
                 decreaseSpeedTimeWhenRotating();
         } else {
+            isSoundPlaying = false;
+            playerSounds.stopPlayingEngineSound();
             decreaseSpeedIfNotMoving();
         }
 
