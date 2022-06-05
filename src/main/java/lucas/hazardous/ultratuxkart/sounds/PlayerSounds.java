@@ -11,7 +11,7 @@ public class PlayerSounds {
         try {
             AudioInputStream file = AudioSystem.getAudioInputStream(
                     Objects.requireNonNull(
-                            this.getClass().getClassLoader().getResourceAsStream("engine.wav")));
+                            this.getClass().getClassLoader().getResourceAsStream("sounds/engine.wav")));
             engineClip = AudioSystem.getClip();
             engineClip.open(file);
             engineClip.loop(Clip.LOOP_CONTINUOUSLY);
