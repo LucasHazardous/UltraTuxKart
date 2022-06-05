@@ -25,7 +25,7 @@ public class GameSettingsMenuPanel extends JPanel {
         setFocusable(true);
         addKeyListener(new PanelKeyListener());
 
-        loadButtonTexts("english.language");
+        loadButtonTexts("languages/english.language");
 
         addSkinSelectorComboBox();
 
