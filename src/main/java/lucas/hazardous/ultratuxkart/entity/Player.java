@@ -126,9 +126,12 @@ public class Player {
             if(isMovingRight || isMovingLeft)
                 decreaseSpeedTimeWhenRotating();
         } else {
+            decreaseSpeedIfNotMoving();
+        }
+
+        if(speedTime == 0) {
             isSoundPlaying = false;
             playerSounds.stopPlayingEngineSound();
-            decreaseSpeedIfNotMoving();
         }
 
         savePreviousPlayerPosition();
