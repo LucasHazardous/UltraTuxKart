@@ -16,7 +16,7 @@ public class MainMenuPanel extends JPanel {
         this.parentFrame = parentFrame;
 
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-        setPreferredSize(new Dimension(MainFrame.PANEL_WIDTH, MainFrame.PANEL_HEIGHT));
+        setPreferredSize(MainFrame.MENU_SIZE);
         setFocusable(true);
 
         addAuthorLabel();

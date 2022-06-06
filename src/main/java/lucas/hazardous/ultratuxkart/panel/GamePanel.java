@@ -23,9 +23,6 @@ import java.util.List;
 import java.util.Objects;
 
 public class GamePanel extends JPanel implements ActionListener {
-    private static final int GAME_WIDTH = 500;
-    private static final int GAME_HEIGHT = 500;
-
     public static final int TILE_SIZE = 100;
 
     private static boolean isBotEnabled;
@@ -57,7 +54,7 @@ public class GamePanel extends JPanel implements ActionListener {
 
     private boolean canPlayerMove = true;
 
-    private final Player player = new Player(GAME_WIDTH, GAME_HEIGHT,
+    private final Player player = new Player(MainFrame.PANEL_WIDTH, MainFrame.PANEL_HEIGHT,
             mapStartingPoint.get(1) * TILE_SIZE + TILE_SIZE / 2-Player.PLAYER_SIZE/2,
             mapStartingPoint.get(0) * TILE_SIZE + TILE_SIZE / 2-Player.PLAYER_SIZE/2);
 
@@ -73,8 +70,7 @@ public class GamePanel extends JPanel implements ActionListener {
         }
 
         this.parentFrame = parentFrame;
-
-        this.setPreferredSize(new Dimension(GAME_WIDTH, GAME_HEIGHT));
+        this.setPreferredSize(MainFrame.MENU_SIZE);
         this.setBackground(Color.black);
         this.setFocusable(true);
         this.addKeyListener(new PlayerControls());
@@ -206,7 +202,7 @@ public class GamePanel extends JPanel implements ActionListener {
         g.setFont(new Font("Monospaced", Font.BOLD, TILE_SIZE/5));
         g.setColor(Color.white);
         FontMetrics metrics = getFontMetrics(g.getFont());
-        g.drawString(text, (GAME_WIDTH - metrics.stringWidth(text))/2, GAME_HEIGHT/2);
+        g.drawString(text, (MainFrame.PANEL_WIDTH - metrics.stringWidth(text))/2, MainFrame.PANEL_HEIGHT/2);
     }
 
     @Override

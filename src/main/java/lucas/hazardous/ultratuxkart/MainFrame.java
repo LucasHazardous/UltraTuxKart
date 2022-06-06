@@ -1,11 +1,9 @@
 package lucas.hazardous.ultratuxkart;
 
-import lucas.hazardous.ultratuxkart.panel.GamePanel;
-import lucas.hazardous.ultratuxkart.panel.GameSettingsMenuPanel;
-import lucas.hazardous.ultratuxkart.panel.MainMenuPanel;
-import lucas.hazardous.ultratuxkart.panel.MapCreatorPanel;
+import lucas.hazardous.ultratuxkart.panel.*;
 
 import javax.swing.*;
+import java.awt.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -23,8 +21,13 @@ public class MainFrame extends JFrame {
 
     public static final int PANEL_WIDTH = 500;
     public static final int PANEL_HEIGHT = 500;
+    public static final int DASHBOARD_PANEL_HEIGHT = 50;
 
     private final GameSettingsMenuPanel gameSettingsMenuPanel = new GameSettingsMenuPanel(this);
+
+    public static final Dimension GAME_PANEL_SIZE = new Dimension(MainFrame.PANEL_WIDTH, (int) (MainFrame.PANEL_HEIGHT+MainFrame.DASHBOARD_PANEL_HEIGHT*1.75));
+
+    public static final Dimension MENU_SIZE = new Dimension(new Dimension(MainFrame.PANEL_WIDTH, MainFrame.PANEL_HEIGHT));
 
     public MainFrame() {
         this.add(menu);
@@ -79,6 +82,22 @@ public class MainFrame extends JFrame {
     public void changePanelToGame(String chosenSkin) {
         getContentPane().removeAll();
 
+        JPanel masterPanel = getNewMasterPanel();
+
+        GamePanel game = getNewGamePanel(chosenSkin);
+
+        masterPanel.add(new DashboardPanel());
+        masterPanel.add(game);
+
+        add(masterPanel);
+
+        setSize(GAME_PANEL_SIZE);
+
+        game.requestFocus(false);
+        refocusRevalidateRepaint();
+    }
+
+    private GamePanel getNewGamePanel(String chosenSkin) {
         GamePanel.setIsBotEnabled(isBotEnabled);
         GamePanel game = new GamePanel(this);
         try {
@@ -86,15 +105,21 @@ public class MainFrame extends JFrame {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        add(game);
+        return game;
+    }
 
-        refocusRevalidateRepaint();
-        game.requestFocus(false);
+    private JPanel getNewMasterPanel() {
+        JPanel masterPanel = new JPanel();
+        masterPanel.setPreferredSize(GAME_PANEL_SIZE);
+        masterPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 0));
+        masterPanel.setBorder(BorderFactory.createEmptyBorder());
+        return masterPanel;
     }
 
     public void changePanelToMenu() {
         getContentPane().removeAll();
         add(menu);
+        setSize(MENU_SIZE);
 
         refocusRevalidateRepaint();
     }
