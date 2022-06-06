@@ -22,6 +22,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
+import static lucas.hazardous.ultratuxkart.MainFrame.TIMER_DELAY;
+
 public class GamePanel extends JPanel implements ActionListener {
     public static final int TILE_SIZE = 100;
 
@@ -49,7 +51,6 @@ public class GamePanel extends JPanel implements ActionListener {
 
     private final MapEngine mapEngine = new MapEngine(map, TILE_SIZE);
 
-    private static final int TIMER_DELAY = 100;
     private final Timer timer;
 
     private boolean canPlayerMove = true;
@@ -83,6 +84,10 @@ public class GamePanel extends JPanel implements ActionListener {
     {
         mapTargetPoint.add(0);
         mapTargetPoint.add(4);
+    }
+
+    public Player getPlayer() {
+        return player;
     }
 
     public static void setIsBotEnabled(boolean isBotEnabled) {

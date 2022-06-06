@@ -29,6 +29,8 @@ public class MainFrame extends JFrame {
 
     public static final Dimension MENU_SIZE = new Dimension(new Dimension(MainFrame.PANEL_WIDTH, MainFrame.PANEL_HEIGHT));
 
+    public static final int TIMER_DELAY = 100;
+
     public MainFrame() {
         this.add(menu);
         this.setTitle("UltraTuxKart");
@@ -86,7 +88,7 @@ public class MainFrame extends JFrame {
 
         GamePanel game = getNewGamePanel(chosenSkin);
 
-        masterPanel.add(new DashboardPanel());
+        masterPanel.add(new DashboardPanel(game.getPlayer()));
         masterPanel.add(game);
 
         add(masterPanel);
