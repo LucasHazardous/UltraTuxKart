@@ -1,5 +1,6 @@
 package lucas.hazardous.ultratuxkart.panel;
 
+import lucas.hazardous.ultratuxkart.Main;
 import lucas.hazardous.ultratuxkart.MainFrame;
 import lucas.hazardous.ultratuxkart.entity.EnemyBot;
 import lucas.hazardous.ultratuxkart.entity.Player;
@@ -22,10 +23,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-import static lucas.hazardous.ultratuxkart.MainFrame.TIMER_DELAY;
-
 public class GamePanel extends JPanel implements ActionListener {
-    public static final int TILE_SIZE = 100;
 
     private static boolean isBotEnabled;
 
@@ -49,15 +47,15 @@ public class GamePanel extends JPanel implements ActionListener {
 
     private EnemyBot enemyBot;
 
-    private final MapEngine mapEngine = new MapEngine(map, TILE_SIZE);
+    private final MapEngine mapEngine = new MapEngine(map);
 
     private final Timer timer;
 
     private boolean canPlayerMove = true;
 
-    private final Player player = new Player(MainFrame.PANEL_WIDTH, MainFrame.PANEL_HEIGHT,
-            mapStartingPoint.get(1) * TILE_SIZE + TILE_SIZE / 2-Player.PLAYER_SIZE/2,
-            mapStartingPoint.get(0) * TILE_SIZE + TILE_SIZE / 2-Player.PLAYER_SIZE/2);
+    private final Player player = new Player(Main.PANEL_WIDTH, Main.PANEL_HEIGHT,
+            mapStartingPoint.get(1) * Main.TILE_SIZE + Main.TILE_SIZE / 2-Player.PLAYER_SIZE/2,
+            mapStartingPoint.get(0) * Main.TILE_SIZE + Main.TILE_SIZE / 2-Player.PLAYER_SIZE/2);
 
     private final MainFrame parentFrame;
 
@@ -66,7 +64,7 @@ public class GamePanel extends JPanel implements ActionListener {
 
         if(isBotEnabled) {
             enemyBotPath = pathfinder.findPathToTarget(mapTargetPoint, mapStartingPoint);
-            enemyBot = new EnemyBot(enemyBotPath, TILE_SIZE);
+            enemyBot = new EnemyBot(enemyBotPath, Main.TILE_SIZE);
             enemyBot.start();
         }
 
@@ -76,7 +74,7 @@ public class GamePanel extends JPanel implements ActionListener {
         this.setFocusable(true);
         this.addKeyListener(new PlayerControls());
 
-        timer = new Timer(TIMER_DELAY, this);
+        timer = new Timer(Main.TIMER_DELAY, this);
         timer.start();
     }
 
@@ -141,13 +139,13 @@ public class GamePanel extends JPanel implements ActionListener {
     private void drawBotPath(Graphics g) {
         for (List<Integer> point : enemyBotPath) {
             g.setColor(Color.cyan);
-            g.fillRect(point.get(1) * TILE_SIZE + TILE_SIZE / 2, point.get(0) * TILE_SIZE + TILE_SIZE / 2, 2, 2);
+            g.fillRect(point.get(1) * Main.TILE_SIZE + Main.TILE_SIZE / 2, point.get(0) * Main.TILE_SIZE + Main.TILE_SIZE / 2, 2, 2);
         }
     }
 
     private void drawTargetPoint(Graphics g) {
         g.setColor(Color.orange);
-        g.fillRect(mapTargetPoint.get(1)*TILE_SIZE, mapTargetPoint.get(0)*TILE_SIZE, TILE_SIZE, TILE_SIZE);
+        g.fillRect(mapTargetPoint.get(1)*Main.TILE_SIZE, mapTargetPoint.get(0)*Main.TILE_SIZE, Main.TILE_SIZE, Main.TILE_SIZE);
     }
 
     private void drawPlayer(Graphics g) {
@@ -173,10 +171,10 @@ public class GamePanel extends JPanel implements ActionListener {
     }
 
     private void endGameIfPlayerWon(Graphics g) throws IOException {
-        if(player.getPlayerX() > mapTargetPoint.get(1)*TILE_SIZE &&
-                player.getPlayerX() < (mapTargetPoint.get(1)+1)*TILE_SIZE &&
-                player.getPlayerY() > mapTargetPoint.get(0)*TILE_SIZE &&
-                player.getPlayerY() < (mapTargetPoint.get(0)+1)*TILE_SIZE) {
+        if(player.getPlayerX() > mapTargetPoint.get(1)*Main.TILE_SIZE &&
+                player.getPlayerX() < (mapTargetPoint.get(1)+1)*Main.TILE_SIZE &&
+                player.getPlayerY() > mapTargetPoint.get(0)*Main.TILE_SIZE &&
+                player.getPlayerY() < (mapTargetPoint.get(0)+1)*Main.TILE_SIZE) {
 
             //Photo by Kateryna Babaieva from Pexels
             showEndScreen(g, this.getClass().getClassLoader().getResourceAsStream("images/factory.jpg"), "\uD83D\uDE03\uD83D\uDC4D");
@@ -186,7 +184,7 @@ public class GamePanel extends JPanel implements ActionListener {
 
     private void stopGameIfPlayerLost(Graphics g) throws IOException {
         if((isBotEnabled && enemyBot.isEndPointReached()) ||
-                (map[player.getPlayerY()/TILE_SIZE][player.getPlayerX()/TILE_SIZE] == 0)) {
+                (map[player.getPlayerY()/Main.TILE_SIZE][player.getPlayerX()/Main.TILE_SIZE] == 0)) {
             //Photo by Carlos from Pexels
             showEndScreen(g, this.getClass().getClassLoader().getResourceAsStream("images/vulcan.jpg"), "\uD83D\uDE1E\uD83D\uDC4E");
             stopTimerPlayerAndSounds();
@@ -204,10 +202,10 @@ public class GamePanel extends JPanel implements ActionListener {
         g.drawImage(endPicture, 0, 0, null);
         image.close();
 
-        g.setFont(new Font("Monospaced", Font.BOLD, TILE_SIZE/5));
+        g.setFont(new Font("Monospaced", Font.BOLD, Main.TILE_SIZE/5));
         g.setColor(Color.white);
         FontMetrics metrics = getFontMetrics(g.getFont());
-        g.drawString(text, (MainFrame.PANEL_WIDTH - metrics.stringWidth(text))/2, MainFrame.PANEL_HEIGHT/2);
+        g.drawString(text, (Main.PANEL_WIDTH - metrics.stringWidth(text))/2, Main.PANEL_HEIGHT/2);
     }
 
     @Override

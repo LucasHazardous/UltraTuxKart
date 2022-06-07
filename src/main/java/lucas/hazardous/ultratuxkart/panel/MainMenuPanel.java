@@ -1,5 +1,6 @@
 package lucas.hazardous.ultratuxkart.panel;
 
+import lucas.hazardous.ultratuxkart.Main;
 import lucas.hazardous.ultratuxkart.MainFrame;
 
 import javax.imageio.ImageIO;
@@ -21,7 +22,7 @@ public class MainMenuPanel extends JPanel {
 
         addAuthorLabel();
 
-        add(Box.createRigidArea(new Dimension(MainFrame.PANEL_WIDTH/4, MainFrame.PANEL_HEIGHT/4)));
+        add(Box.createRigidArea(new Dimension(Main.PANEL_WIDTH/4, Main.PANEL_HEIGHT/4)));
 
         addPlayButton();
 

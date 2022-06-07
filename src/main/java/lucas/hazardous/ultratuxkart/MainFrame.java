@@ -19,17 +19,11 @@ public class MainFrame extends JFrame {
 
     private boolean isBotEnabled = true;
 
-    public static final int PANEL_WIDTH = 500;
-    public static final int PANEL_HEIGHT = 500;
-    public static final int DASHBOARD_PANEL_HEIGHT = 50;
-
     private final GameSettingsMenuPanel gameSettingsMenuPanel = new GameSettingsMenuPanel(this);
 
-    public static final Dimension GAME_PANEL_SIZE = new Dimension(MainFrame.PANEL_WIDTH, (int) (MainFrame.PANEL_HEIGHT+MainFrame.DASHBOARD_PANEL_HEIGHT*1.75));
+    public static final Dimension GAME_PANEL_SIZE = new Dimension(Main.PANEL_WIDTH, (int) (Main.PANEL_HEIGHT+Main.DASHBOARD_PANEL_HEIGHT*1.75));
 
-    public static final Dimension MENU_SIZE = new Dimension(new Dimension(MainFrame.PANEL_WIDTH, MainFrame.PANEL_HEIGHT));
-
-    public static final int TIMER_DELAY = 100;
+    public static final Dimension MENU_SIZE = new Dimension(new Dimension(Main.PANEL_WIDTH, Main.PANEL_HEIGHT));
 
     public MainFrame() {
         this.add(menu);

@@ -1,5 +1,6 @@
 package lucas.hazardous.ultratuxkart.panel;
 
+import lucas.hazardous.ultratuxkart.Main;
 import lucas.hazardous.ultratuxkart.MainFrame;
 import lucas.hazardous.ultratuxkart.tool.MapEngine;
 
@@ -21,8 +22,6 @@ public class MapCreatorPanel extends JPanel {
 
     private static List<Integer> mapTargetPoint = new ArrayList<>();
 
-    private static final int TILE_SIZE = GamePanel.TILE_SIZE;
-
     private static byte[][] map = new byte[][]{
             {0, 0, 0, 0, 2},
             {0, 0, 0, 0, 0},
@@ -30,7 +29,7 @@ public class MapCreatorPanel extends JPanel {
             {0, 0, 0, 0, 0},
             {0, 0, 0, 0, 0}
     };
-    private final MapEngine mapEngine = new MapEngine(map, TILE_SIZE);
+    private final MapEngine mapEngine = new MapEngine(map);
 
     public MapCreatorPanel(MainFrame parentFrame) {
         this.parentFrame = parentFrame;
@@ -63,15 +62,15 @@ public class MapCreatorPanel extends JPanel {
 
     private void drawTargetPoint(Graphics g) {
         g.setColor(Color.orange);
-        g.fillRect(mapTargetPoint.get(1)*TILE_SIZE, mapTargetPoint.get(0)*TILE_SIZE, TILE_SIZE, TILE_SIZE);
+        g.fillRect(mapTargetPoint.get(1)*Main.TILE_SIZE, mapTargetPoint.get(0)*Main.TILE_SIZE, Main.TILE_SIZE, Main.TILE_SIZE);
     }
 
     private class PanelMouseListener implements MouseListener {
 
         @Override
         public void mouseClicked(MouseEvent e) {
-            int tmpX = e.getX()/TILE_SIZE;
-            int tmpY = e.getY()/TILE_SIZE;
+            int tmpX = e.getX()/Main.TILE_SIZE;
+            int tmpY = e.getY()/Main.TILE_SIZE;
 
             if(map[tmpY][tmpX] != 2)
                 map[tmpY][tmpX] = (byte) (map[tmpY][tmpX] == 0 ? 1 : 0);
