@@ -8,7 +8,7 @@ public class Player {
     private final int GAME_WIDTH;
     private final int GAME_HEIGHT;
 
-    public static final double MAX_PLAYER_SPEED = 0.8;
+    public static final double ACCELERATION = 0.8;
 
     public static final int PLAYER_SIZE = 20;
 
@@ -20,7 +20,7 @@ public class Player {
     private int playerY;
 
     private int speedTime = 0;
-    private static final int TIME_TO_REACH_MAX_SPEED = 7;
+    public static final int TIME_TO_REACH_MAX_SPEED = 7;
 
     public int playerBoosts = 3;
     private static final int BOOST_STRENGTH = 3;
@@ -49,6 +49,10 @@ public class Player {
 
         this.lineX = this.playerX;
         this.lineY = this.playerY;
+    }
+
+    public int getSpeedTime() {
+        return speedTime;
     }
 
     public void setIsDriving(boolean isDriving) {
@@ -95,8 +99,8 @@ public class Player {
     }
 
     private void calculateNewPlayerPosition() {
-        playerX += (int) ((Math.cos(speedVectorAngleRadians) * (Math.pow(speedTime, 2) * MAX_PLAYER_SPEED/2)) - Math.sin(speedVectorAngleRadians)*(Math.pow(speedTime, 1.3) * MAX_PLAYER_SPEED/2));
-        playerY += (int) ((Math.sin(speedVectorAngleRadians) * (Math.pow(speedTime, 2) * MAX_PLAYER_SPEED/2)) + Math.cos(speedVectorAngleRadians)*(Math.pow(speedTime, 1.3) * MAX_PLAYER_SPEED/2));
+        playerX += (int) ((Math.cos(speedVectorAngleRadians) * (Math.pow(speedTime, 2) * ACCELERATION /2)) - Math.sin(speedVectorAngleRadians));
+        playerY += (int) ((Math.sin(speedVectorAngleRadians) * (Math.pow(speedTime, 2) * ACCELERATION /2)) + Math.cos(speedVectorAngleRadians));
     }
 
     private void savePreviousPlayerPosition() {
