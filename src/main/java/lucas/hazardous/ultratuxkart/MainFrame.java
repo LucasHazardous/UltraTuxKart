@@ -1,6 +1,7 @@
 package lucas.hazardous.ultratuxkart;
 
 import lucas.hazardous.ultratuxkart.panel.*;
+import lucas.hazardous.ultratuxkart.sounds.MenuSounds;
 
 import javax.swing.*;
 import java.awt.*;
@@ -25,6 +26,8 @@ public class MainFrame extends JFrame {
 
     public static final Dimension MENU_SIZE = new Dimension(new Dimension(Main.PANEL_WIDTH, Main.PANEL_HEIGHT));
 
+    private final MenuSounds menuSounds;
+
     public MainFrame() {
         this.add(menu);
         this.setTitle("UltraTuxKart");
@@ -33,6 +36,8 @@ public class MainFrame extends JFrame {
         this.pack();
         this.setVisible(true);
         this.setLocationRelativeTo(null);
+
+        menuSounds = new MenuSounds();
     }
 
     public void setBotEnabled(boolean botEnabled) {
@@ -131,6 +136,7 @@ public class MainFrame extends JFrame {
     }
 
     public void changePanelToGameSettings() {
+        menuSounds.stopMenuSound();
         getContentPane().removeAll();
         add(gameSettingsMenuPanel);
 
