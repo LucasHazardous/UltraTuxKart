@@ -99,8 +99,8 @@ public class Player {
     }
 
     private void calculateNewPlayerPosition() {
-        playerX += (int) ((Math.cos(speedVectorAngleRadians) * (Math.pow(speedTime, 2) * ACCELERATION /2)) - Math.sin(speedVectorAngleRadians));
-        playerY += (int) ((Math.sin(speedVectorAngleRadians) * (Math.pow(speedTime, 2) * ACCELERATION /2)) + Math.cos(speedVectorAngleRadians));
+        playerX += (int) ((Math.cos(speedVectorAngleRadians) * (Math.pow(speedTime, 2) * ACCELERATION/2)) - Math.sin(speedVectorAngleRadians)*(Math.pow(speedTime, 1.3) * ACCELERATION/2));
+        playerY += (int) ((Math.sin(speedVectorAngleRadians) * (Math.pow(speedTime, 2) * ACCELERATION/2)) + Math.cos(speedVectorAngleRadians)*(Math.pow(speedTime, 1.3) * ACCELERATION/2));
     }
 
     private void savePreviousPlayerPosition() {
