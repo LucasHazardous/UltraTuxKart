@@ -93,6 +93,7 @@ public class Player {
 
     public void useBoost() {
         if(playerBoosts > 0) {
+            playerSounds.playBoost();
             playerBoosts--;
             speedTime += BOOST_STRENGTH;
         }

@@ -1,28 +1,31 @@
 package lucas.hazardous.ultratuxkart.sounds;
 
 import javax.sound.sampled.*;
-import java.io.BufferedInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.util.Objects;
+
+import static lucas.hazardous.ultratuxkart.sounds.SoundFileLoader.getSoundFile;
 
 public class PlayerSounds {
-    private final Clip engineClip;
+    private Clip engineClip;
+    private Clip boostClip;
 
     public PlayerSounds() {
         try {
-            InputStream file =
-                    Objects.requireNonNull(
-                            this.getClass().getClassLoader().getResourceAsStream("sounds/engine.wav"));
-            InputStream inputStream = new BufferedInputStream(file);
-
-            engineClip = AudioSystem.getClip();
-            engineClip.open(AudioSystem.getAudioInputStream(inputStream));
-            engineClip.loop(Clip.LOOP_CONTINUOUSLY);
-            engineClip.stop();
+            loadEngineClip();
+            loadBoostClip();
         } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private void loadEngineClip() throws LineUnavailableException, UnsupportedAudioFileException, IOException {
+        engineClip = AudioSystem.getClip();
+        engineClip.open(getSoundFile("sounds/engine.wav"));
+    }
+
+    private void loadBoostClip() throws UnsupportedAudioFileException, IOException, LineUnavailableException {
+        boostClip = AudioSystem.getClip();
+        boostClip.open(getSoundFile("sounds/boost.wav"));
     }
 
     public boolean isEngineSoundRunning() {
@@ -36,5 +39,10 @@ public class PlayerSounds {
 
     public void stopPlayingEngineSound() {
         engineClip.stop();
+    }
+
+    public void playBoost() {
+        boostClip.setFramePosition(0);
+        boostClip.start();
     }
 }
