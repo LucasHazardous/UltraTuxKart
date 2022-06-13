@@ -127,8 +127,6 @@ public class GamePanel extends JPanel implements ActionListener {
 
         drawPlayer(g);
 
-        drawPlayerBoosts(g);
-
         drawPlayerSpeedVector(g);
 
         endGameIfPlayerWon(g);
@@ -153,11 +151,6 @@ public class GamePanel extends JPanel implements ActionListener {
         AffineTransformOp op = new AffineTransformOp(transform, AffineTransformOp.TYPE_BILINEAR);
 
         g.drawImage(op.filter(Player.PLAYER_IMG, null), player.getPlayerX(), player.getPlayerY(), Player.PLAYER_SIZE, Player.PLAYER_SIZE, null);
-    }
-
-    private void drawPlayerBoosts(Graphics g) {
-        g.setColor(Color.CYAN);
-        g.drawString("|".repeat(player.getPlayerBoosts()), player.getPlayerX(), player.getPlayerY());
     }
 
     private void drawPlayerSpeedVector(Graphics g) {
