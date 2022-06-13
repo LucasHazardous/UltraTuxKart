@@ -221,7 +221,7 @@ public class GamePanel extends JPanel implements ActionListener {
                 case KeyEvent.VK_D -> player.setMovingRight(true);
                 case KeyEvent.VK_A -> player.setMovingLeft(true);
                 case KeyEvent.VK_ESCAPE -> parentFrame.changePanelToMenu();
-                case KeyEvent.VK_SPACE -> player.useBoost();
+                case KeyEvent.VK_SPACE -> usePlayersBoostIfPossible();
                 case KeyEvent.VK_BACK_QUOTE -> enableDebug = !enableDebug;
             }
         }
@@ -234,5 +234,10 @@ public class GamePanel extends JPanel implements ActionListener {
                 case KeyEvent.VK_A -> player.setMovingLeft(false);
             }
         }
+    }
+
+    private void usePlayersBoostIfPossible() {
+        if(canPlayerMove)
+            player.useBoost();
     }
 }
