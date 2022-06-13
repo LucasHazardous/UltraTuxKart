@@ -59,6 +59,8 @@ public class GamePanel extends JPanel implements ActionListener {
 
     private final MainFrame parentFrame;
 
+    private boolean enableDebug = false;
+
     public GamePanel(MainFrame parentFrame) {
         Pathfinder pathfinder = new Pathfinder(map);
 
@@ -121,13 +123,15 @@ public class GamePanel extends JPanel implements ActionListener {
         drawTargetPoint(g);
 
         if(isBotEnabled) {
-            drawBotPath(g);
+            if (enableDebug)
+                drawBotPath(g);
             drawBot(g);
         }
 
         drawPlayer(g);
 
-        drawPlayerSpeedVector(g);
+        if(enableDebug)
+            drawPlayerSpeedVector(g);
 
         endGameIfPlayerWon(g);
 
@@ -218,6 +222,7 @@ public class GamePanel extends JPanel implements ActionListener {
                 case KeyEvent.VK_A -> player.setMovingLeft(true);
                 case KeyEvent.VK_ESCAPE -> parentFrame.changePanelToMenu();
                 case KeyEvent.VK_SPACE -> player.useBoost();
+                case KeyEvent.VK_BACK_QUOTE -> enableDebug = !enableDebug;
             }
         }
 
