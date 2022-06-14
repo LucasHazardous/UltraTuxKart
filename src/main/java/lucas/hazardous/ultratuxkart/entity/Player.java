@@ -104,7 +104,7 @@ public class Player {
         playerY += (int) ((Math.sin(speedVectorAngleRadians) * (Math.pow(speedTime, 2) * ACCELERATION/2)) + Math.cos(speedVectorAngleRadians)*(Math.pow(speedTime, 1.3) * ACCELERATION/2));
     }
 
-    private void savePreviousPlayerPosition() {
+    private void saveCurrentPlayerPosition() {
         lastPlayerX = playerX;
         lastPlayerY = playerY;
     }
@@ -116,10 +116,7 @@ public class Player {
 
     public void playerMove() {
         if (isMovingForward) {
-            if(!isSoundPlaying || !playerSounds.isEngineSoundRunning()){
-                isSoundPlaying = true;
-                playerSounds.resumeEngineSound();
-            }
+            startPlayingEngineSoundIfNotStarted();
 
             if(isMovingRight)
                 rotateRight();
@@ -134,18 +131,29 @@ public class Player {
             decreaseSpeedIfNotMoving();
         }
 
-        if(speedTime == 0) {
-            isSoundPlaying = false;
-            playerSounds.stopPlayingEngineSound();
-        }
+        stopPlayingEngineSoundIfNotMoving();
 
-        savePreviousPlayerPosition();
+        saveCurrentPlayerPosition();
 
         calculateNewPlayerPosition();
 
         calculateLinePosition();
 
         movePlayerBackIfOutOfWindow();
+    }
+
+    private void startPlayingEngineSoundIfNotStarted() {
+        if(!isSoundPlaying || !playerSounds.isEngineSoundRunning()){
+            isSoundPlaying = true;
+            playerSounds.resumeEngineSound();
+        }
+    }
+
+    private void stopPlayingEngineSoundIfNotMoving() {
+        if(speedTime == 0) {
+            isSoundPlaying = false;
+            playerSounds.stopPlayingEngineSound();
+        }
     }
 
     private void changeSpeedTime() {
